@@ -1,0 +1,293 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@company.com",
+      "employee_id": "EMP001",
+      "is_admin": 1,
+      "blocked_until": null,
+      "created_at": "2026-03-18 04:53:44"
+    },
+    {
+      "id": 2,
+      "name": "Test User 1",
+      "email": "testuser1@company.com",
+      "employee_id": "EMP002",
+      "is_admin": 0,
+      "blocked_until": "2026-03-20 23:59:59",
+      "created_at": "2026-03-18 04:53:44"
+    },
+    {
+      "id": 3,
+      "name": "Test User 2",
+      "email": "testuser2@company.com",
+      "employee_id": "EMP003",
+      "is_admin": 0,
+      "blocked_until": null,
+      "created_at": "2026-03-18 04:53:44"
+    },
+    {
+      "id": 4,
+      "name": "Test User 3",
+      "email": "testuser3@company.com",
+      "employee_id": "EMP004",
+      "is_admin": 0,
+      "blocked_until": null,
+      "created_at": "2026-03-18 04:53:44"
+    },
+    {
+      "id": 5,
+      "name": "Karpaga Vinayagam Thangavelu",
+      "email": "karpagavinayagam_thangavelu@trimble.com",
+      "employee_id": null,
+      "is_admin": 0,
+      "blocked_until": null,
+      "created_at": "2026-04-10 15:50:33"
+    }
+  ],
+  "slots": [
+    {
+      "id": 1,
+      "label": "7:30 AM - Metro to Office",
+      "time": "07:30",
+      "direction": "morning_to_office",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "label": "8:30 AM - Metro to Office",
+      "time": "08:30",
+      "direction": "morning_to_office",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "label": "5:00 PM - Office to Metro",
+      "time": "17:00",
+      "direction": "evening_to_metro",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "label": "6:00 PM - Office to Metro",
+      "time": "18:00",
+      "direction": "evening_to_metro",
+      "sort_order": 4
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "slot_id": 1,
+      "booking_date": "2026-03-19",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 05:30:23",
+      "cancelled_at": "2026-03-18 05:30:31",
+      "no_show_at": null
+    },
+    {
+      "id": 2,
+      "user_id": 1,
+      "slot_id": 3,
+      "booking_date": "2026-03-18",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 06:35:36",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 3,
+      "user_id": 1,
+      "slot_id": 2,
+      "booking_date": "2026-03-19",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 06:41:20",
+      "cancelled_at": "2026-03-18 06:41:26",
+      "no_show_at": null
+    },
+    {
+      "id": 4,
+      "user_id": 1,
+      "slot_id": 2,
+      "booking_date": "2026-03-19",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 07:00:39",
+      "cancelled_at": "2026-03-18 07:00:49",
+      "no_show_at": null
+    },
+    {
+      "id": 5,
+      "user_id": 1,
+      "slot_id": 4,
+      "booking_date": "2026-03-18",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 07:22:07",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 6,
+      "user_id": 2,
+      "slot_id": 2,
+      "booking_date": "2026-03-19",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:13:13",
+      "cancelled_at": "2026-03-18 13:26:16",
+      "no_show_at": null
+    },
+    {
+      "id": 7,
+      "user_id": 2,
+      "slot_id": 2,
+      "booking_date": "2026-03-21",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:13:28",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 8,
+      "user_id": 2,
+      "slot_id": 1,
+      "booking_date": "2026-03-20",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:15:06",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 9,
+      "user_id": 1,
+      "slot_id": 1,
+      "booking_date": "2026-03-19",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:31:55",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 10,
+      "user_id": 2,
+      "slot_id": 3,
+      "booking_date": "2026-03-24",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:32:25",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 11,
+      "user_id": 2,
+      "slot_id": 1,
+      "booking_date": "2026-03-23",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:39:29",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 12,
+      "user_id": 2,
+      "slot_id": 3,
+      "booking_date": "2026-03-26",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:40:01",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 13,
+      "user_id": 2,
+      "slot_id": 2,
+      "booking_date": "2026-03-31",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:49:01",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 14,
+      "user_id": 2,
+      "slot_id": 3,
+      "booking_date": "2026-03-30",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 12:56:17",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 15,
+      "user_id": 2,
+      "slot_id": 3,
+      "booking_date": "2026-03-18",
+      "status": "no_show",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 14:00:00",
+      "cancelled_at": null,
+      "no_show_at": "2026-03-18 18:00:00"
+    },
+    {
+      "id": 16,
+      "user_id": 2,
+      "slot_id": 1,
+      "booking_date": "2026-03-19",
+      "status": "no_show",
+      "vehicle_id": null,
+      "created_at": "2026-03-18 14:00:00",
+      "cancelled_at": null,
+      "no_show_at": "2026-03-19 08:00:00"
+    },
+    {
+      "id": 17,
+      "user_id": 5,
+      "slot_id": 1,
+      "booking_date": "2026-04-13",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-04-10 15:51:51",
+      "cancelled_at": null,
+      "no_show_at": null
+    },
+    {
+      "id": 18,
+      "user_id": 5,
+      "slot_id": 2,
+      "booking_date": "2026-04-15",
+      "status": "booked",
+      "vehicle_id": null,
+      "created_at": "2026-04-10 15:52:27",
+      "cancelled_at": null,
+      "no_show_at": null
+    }
+  ],
+  "vehicles": [
+    {
+      "id": 1,
+      "name": "Shuttle A",
+      "capacity": 12,
+      "created_at": "2026-03-18 04:53:44"
+    },
+    {
+      "id": 2,
+      "name": "Shuttle B",
+      "capacity": 12,
+      "created_at": "2026-03-18 04:53:44"
+    }
+  ]
+}

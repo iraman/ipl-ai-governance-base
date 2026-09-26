@@ -1,0 +1,42 @@
+name: AGL — Behavioral asset validation
+
+on:
+  pull_request:
+    paths:
+      - '.ai-governance/**'
+      - '.cursor/rules/**'
+      - 'behavior-manifest.json'
+      - 'scripts/validate-governance.mjs'
+      - 'scripts/governance-regression-tests.mjs'
+      - 'scripts/compute-behavior-manifest.mjs'
+  push:
+    branches: [main]
+    paths:
+      - '.ai-governance/**'
+      - '.cursor/rules/**'
+      - 'behavior-manifest.json'
+
+jobs:
+  governance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate governance structure
+        run: npm run governance:validate
+
+      - name: Run policy regression tests
+        run: npm run governance:test
+
+      - name: Verify manifest matches current governance files
+        run: |
+          npm run governance:manifest
+          if ! git diff --quiet behavior-manifest.json; then
+            echo "behavior-manifest.json is out of date. Run: npm run governance:manifest"
+            git diff behavior-manifest.json
+            exit 1
+          fi

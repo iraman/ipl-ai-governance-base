@@ -1,12 +1,15 @@
 {
   "name": "ipl-ai-governance-base",
-  "version": "1.0.0",
   "private": true,
-  "description": "Dummy app base for AI code generation, governed by .ai-governance/ policies",
+  "description": "Trimble WorkRide plus AGL project base (dummy /src/ and versioned .ai-governance/ policies)",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "governance:validate": "node scripts/validate-governance.mjs",
+    "governance:manifest": "node scripts/compute-behavior-manifest.mjs",
+    "governance:test": "node scripts/governance-regression-tests.mjs",
+    "governance:check": "npm run governance:validate && npm run governance:test"
   },
   "dependencies": {
     "express": "^4.21.1"

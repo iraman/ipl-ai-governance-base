@@ -1,6 +1,6 @@
-# AGL project base — baseline agent rules
+# AGL + Trimble WorkRide — baseline agent rules
 
-Source of truth for AI instructions: `.ai-governance/` (versioned with this repository).
+Source of truth for AI instructions: `.ai-governance/` (versioned, PR-reviewed, CI-validated).
 
 Before generating or modifying code, read and follow:
 
@@ -9,9 +9,24 @@ Before generating or modifying code, read and follow:
    - Do not store tokens in `localStorage` or `sessionStorage`
    - Validate inputs; restrict CORS; do not leak internals in errors
 
-2. **Architecture** — `.ai-governance/architectural-standards.md`
-   - Node/Express only; entry `src/index.js`; default port 4000
-   - Generated application code stays in `/src/`
-   - REST under `/api/`; keep `GET /api/health`
+2. **Baseline architecture** — `.ai-governance/architectural-standards.md`
+   - Dummy / codegen placeholder: Node/Express in `/src/` (port 4000)
+   - Product app: `frontend/` (Vite/React) and `backend/` (Express, port 3001)
 
-Do not invent a second app tree or add frameworks without an approved architecture change.
+3. **WorkRide architecture** — `.ai-governance/rules/architecture-guidelines.md`
+   - API calls via `frontend/src/api.js`
+   - JSON store in `backend/data/store.json`
+
+4. **Authentication** — `.ai-governance/rules/trimble-id-auth.md`
+   - Production: Trimble ID OAuth (`TRIMBLE_ID_SETUP.md`)
+   - Never store access tokens in `localStorage`
+   - Dev email login is local-only; do not copy to production paths
+
+5. **Booking policies** — `.ai-governance/rules/booking-policies.md`
+   - Must match `backend/rules.js`
+   - Morning book by 8 PM prior day; evening by 3 PM same day
+   - Cancel until 1 hour before slot; 2 no-shows → 1-day booking block
+
+6. **Skills** — use `.ai-governance/skills/validate-booking-rules/SKILL.md` when changing booking flows
+
+Traceability: reference `behavior-manifest.json` bundleHash in PRs as `AGL-MANIFEST: <hash>`.

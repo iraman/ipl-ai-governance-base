@@ -1,13 +1,24 @@
+# Dependencies
 node_modules/
 
+# Build output
+frontend/dist/
+backend/dist/
+
+# Local data (uncomment to avoid committing; keep commented to share seed data)
+# backend/data/store.json
+
+# Environment
 .env
 .env.local
 .env.*.local
 
+# Logs and OS
 *.log
 .DS_Store
 Thumbs.db
 
+# IDE
 .idea/
 .vscode/
 *.swp

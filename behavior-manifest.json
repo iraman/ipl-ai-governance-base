@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "framework": "AGL",
+  "project": "trimble-workride",
+  "generatedAt": "2026-09-26T17:37:56.217Z",
+  "bundleHash": "28b99676b2bc78f79de7509ef1bee2a4bce1bc51817f0f808d57a9446f8bb8c1",
+  "files": [
+    {
+      "path": ".ai-governance/ADOPTION.md",
+      "sha256": "87bcbdf07d7697ce4adbe3f4b89cf142a4a5dcaf90dc73b14479826e8a26588a"
+    },
+    {
+      "path": ".ai-governance/PR_REVIEW_CHECKLIST.md",
+      "sha256": "abf568741637960b67233bfa9fedec43158bf0f6f760950221d1e85fb4b1efda"
+    },
+    {
+      "path": ".ai-governance/README.md",
+      "sha256": "1c8f0166d83fed7616f4e0d09b937041bb23b55a744adf9225fcc7b4a9bdd0f1"
+    },
+    {
+      "path": ".ai-governance/architectural-standards.md",
+      "sha256": "342623db45ff299f8f1cb89615bccd29c04e8b091e56579c3a7ef418c3c20f88"
+    },
+    {
+      "path": ".ai-governance/ci/promptfoo.yaml",
+      "sha256": "cafdd123c675306cf565b0a926f5405f5d8142c77186c275098f54aeb2a4058e"
+    },
+    {
+      "path": ".ai-governance/global-security-policy.md",
+      "sha256": "e728133fefee03aa4bbe33d810920fd32e35ad7ed62b568acdde070004b74401"
+    },
+    {
+      "path": ".ai-governance/prompts/pr-review-behavioral-assets.md",
+      "sha256": "4a77346f16022a20023f07a390858ed3a112db67b7ac3caf6ea3ac825653fd4d"
+    },
+    {
+      "path": ".ai-governance/rules/architecture-guidelines.md",
+      "sha256": "6cc98ba85e5eec0d105289e57c9f158453a63b6022a62034861a9f1d3e23fdc4"
+    },
+    {
+      "path": ".ai-governance/rules/booking-policies.md",
+      "sha256": "a78e0e4467b540d3b2ce00f9fb538a674629a3f311e4c49db14e8845a7fbd6d0"
+    },
+    {
+      "path": ".ai-governance/rules/trimble-id-auth.md",
+      "sha256": "f9a4454944319dedbe140fd06cdb554f115d60c9602d083bcfdeeee282644ae0"
+    },
+    {
+      "path": ".ai-governance/skills/validate-booking-rules/SKILL.md",
+      "sha256": "b621a3b2f5a3dced01e96873a1eb985e01f4d0751dcfb051f9bffbb1b9b5164b"
+    }
+  ],
+  "usage": "Reference bundleHash in PRs as AGL-MANIFEST when AI-generated code depends on this rule set."
+}

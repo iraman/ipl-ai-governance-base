@@ -10,14 +10,22 @@ Agents generating or modifying code must keep the dummy app consistent with this
 | Static UI | HTML in `src/public/` | Served by Express; no separate frontend toolchain unless approved |
 | Port | `4000` by default | Override with `PORT` |
 
-Do not introduce NestJS, React, Vite, a database, or a second HTTP server without an explicit architecture change.
+`/src/` is the dummy / AI codegen placeholder. The product application is Trimble WorkRide:
+
+| Layer | Location | Port |
+|-------|----------|------|
+| WorkRide API | `backend/` (`backend/server.js`) | 3001 |
+| WorkRide UI | `frontend/` (Vite/React) | 5173 |
+
+Do not introduce NestJS, a database, or another HTTP server without an explicit architecture change. Do not duplicate WorkRide features inside `/src/`.
 
 ## File placement
 
-- Application code belongs under `/src/`. That directory is the AI code-generation target.
-- New API routes: add them in `src/index.js` or in modules imported from it and kept under `/src/`.
-- Static pages and assets: `src/public/`.
-- Do not create a parallel `app/`, `server/`, or `frontend/` tree for this project.
+- Dummy / experimental generation: `/src/` (`src/index.js`, `src/public/`).
+- WorkRide API routes and rules: `backend/` (see `rules/architecture-guidelines.md`).
+- WorkRide pages: `frontend/src/pages/` with HTTP via `frontend/src/api.js`.
+- Do not create a third app tree (`app/`, `server/`) alongside these.
+
 
 ## API design
 
