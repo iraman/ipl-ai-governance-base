@@ -4,6 +4,54 @@ Simple web app for employees to book the office shuttle (metro ↔ office). Admi
 
 This repository is the GitHub project base: WorkRide (`frontend/` + `backend/`), a dummy Express app in `/src/`, and versioned **Agent Governance Lifecycle (AGL)** assets in `.ai-governance/` (PR review, CI validation, `behavior-manifest.json`).
 
+## Start the application (local)
+
+Need **two terminals**. Start the backend first, then the frontend.
+
+### 1. Backend API
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+- API: **http://localhost:3001**
+- Example: **http://localhost:3001/api/slots**
+
+### 2. Frontend UI
+
+```bash
+cd frontend
+cp .env.example .env
+# Edit .env and set VITE_TRIMBLE_CLIENT_ID (do not commit .env)
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+- Login: **http://127.0.0.1:5173/login**
+- App: **http://127.0.0.1:5173/**
+
+The Vite dev server proxies `/api` to `http://localhost:3001`. Keep both processes running.
+
+### Local login (test users)
+
+On the login page, use **Sign in with Email** (no password):
+
+| Role | Email |
+|------|--------|
+| Admin | `admin@company.com` |
+| User | `testuser1@company.com` |
+| User | `testuser2@company.com` |
+| User | `testuser3@company.com` |
+
+**Sign in with Trimble ID** needs a real Client ID in `frontend/.env` and these exact Console URLs:
+
+- Callback: `http://127.0.0.1:5173/callback`
+- Logout: `http://127.0.0.1:5173/logout-callback`
+
+Gateway API base (after deploy): `https://trimbleworkride.dev.api.trimblecloud.com`
+
 ## Agent Governance (AGL)
 
 Behavioral assets live in `.ai-governance/` and are loaded by Cursor via `.cursor/rules/workride-agl.mdc`.
@@ -42,36 +90,9 @@ CI runs on changes to governance files (see `.github/workflows/agl-validation.ym
 - **Backend:** Node.js, Express, JSON file store (no database install)
 - **Frontend:** React (Vite), React Router
 
-## Setup
+## Dummy AGL app (`/src/`)
 
-### Backend
-
-```bash
-cd backend
-npm install
-npm run dev        # start API on http://localhost:3001 (creates data/store.json with seed data on first run)
-```
-
-### Frontend
-
-Copy `frontend/.env.example` to `frontend/.env` and set `VITE_TRIMBLE_CLIENT_ID`. Do not commit `.env`.
-
-```bash
-cd frontend
-npm install
-npm run dev -- --host 127.0.0.1 --port 5173
-```
-
-Open **http://127.0.0.1:5173/login**. The frontend proxies `/api` to the backend.
-
-Trimble Console URLs for local OAuth:
-
-- Callback: `http://127.0.0.1:5173/callback`
-- Logout: `http://127.0.0.1:5173/logout-callback`
-
-Gateway API base: `https://trimbleworkride.dev.api.trimblecloud.com`
-
-### Dummy AGL app (`/src/`)
+Optional placeholder (not required for WorkRide):
 
 ```bash
 npm install
