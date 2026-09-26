@@ -1,0 +1,17 @@
+# AGL project base — baseline agent rules
+
+Source of truth for AI instructions: `.ai-governance/` (versioned with this repository).
+
+Before generating or modifying code, read and follow:
+
+1. **Security** — `.ai-governance/global-security-policy.md`
+   - No secrets in source; never commit `.env`
+   - Do not store tokens in `localStorage` or `sessionStorage`
+   - Validate inputs; restrict CORS; do not leak internals in errors
+
+2. **Architecture** — `.ai-governance/architectural-standards.md`
+   - Node/Express only; entry `src/index.js`; default port 4000
+   - Generated application code stays in `/src/`
+   - REST under `/api/`; keep `GET /api/health`
+
+Do not invent a second app tree or add frameworks without an approved architecture change.

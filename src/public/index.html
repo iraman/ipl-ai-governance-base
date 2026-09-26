@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGL project base</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1a2332;
+      --muted: #5c6b7a;
+      --accent: #0d6b4c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    main {
+      background: var(--card);
+      max-width: 36rem;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(26, 35, 50, 0.08);
+    }
+    h1 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+    p { margin: 0 0 1rem; color: var(--muted); line-height: 1.5; }
+    code {
+      background: #e8eef2;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    #status { color: var(--accent); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AGL project base</h1>
+    <p>Dummy web app in <code>/src/</code>. AI-generated code should land here and follow <code>.ai-governance/</code>.</p>
+    <p>API health: <span id="status">checking…</span></p>
+  </main>
+  <script>
+    fetch('/api/health')
+      .then((r) => r.json())
+      .then((data) => {
+        document.getElementById('status').textContent = data.status || 'unknown';
+      })
+      .catch(() => {
+        document.getElementById('status').textContent = 'unavailable';
+      });
+  </script>
+</body>
+</html>
