@@ -125,6 +125,7 @@ export default function Book() {
               <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Date</label>
               <input
                 type="date"
+                data-testid="booking-date"
                 value={bookingDate}
                 onChange={(e) => setBookingDate(e.target.value)}
                 min={todayLocal}
@@ -138,7 +139,7 @@ export default function Book() {
             </div>
             <div>
               <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Slot</label>
-              <select value={slotId} onChange={(e) => setSlotId(e.target.value)} required>
+              <select data-testid="booking-slot" value={slotId} onChange={(e) => setSlotId(e.target.value)} required>
                 <option value="">Select slot...</option>
                 {availableSlots.map((s) => (
                   <option key={s.id} value={s.id}>{s.label}</option>
@@ -172,7 +173,7 @@ export default function Book() {
                 Booking is blocked until {new Date(userWithBlock.blocked_until).toLocaleString()} due to no-show policy.
               </p>
             )}
-            <button type="submit" className="btn-primary" disabled={!canBook || loading}>
+            <button type="submit" className="btn-primary" data-testid="book-submit" disabled={!canBook || loading}>
               {loading ? 'Booking...' : 'Book'}
             </button>
           </div>

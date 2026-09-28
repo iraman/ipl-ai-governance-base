@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const dataDir = path.join(__dirname, 'data');
-const filePath = path.join(dataDir, 'store.json');
+const filePath = process.env.WORKRIDE_STORE_FILE || path.join(dataDir, 'store.json');
 
 let state = {
   users: [],
@@ -11,9 +11,14 @@ let state = {
   vehicles: [],
 };
 
+function ensureStoreDir() {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
 function load() {
   try {
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+    ensureStoreDir();
     if (fs.existsSync(filePath)) {
       state = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     }
@@ -24,7 +29,7 @@ function load() {
 
 function save() {
   try {
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+    ensureStoreDir();
     fs.writeFileSync(filePath, JSON.stringify(state, null, 2), 'utf8');
   } catch (e) {
     console.warn('Store save:', e.message);

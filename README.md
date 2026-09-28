@@ -78,6 +78,18 @@ npm run governance:manifest   # refresh behavior-manifest.json hash
 
 CI runs on changes to governance files (see `.github/workflows/agl-validation.yml`).
 
+## Tests
+
+```bash
+npm install
+npx playwright install chromium
+npm test                 # backend (Node test + Supertest) and frontend (Playwright)
+npm run test:backend
+npm run test:frontend
+```
+
+See [test/README.md](./test/README.md).
+
 ## Rules
 
 - **Morning slots:** 7:30 AM, 8:30 AM (Metro → Office). **Book by 8 PM previous evening.**

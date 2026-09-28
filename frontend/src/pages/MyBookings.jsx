@@ -60,7 +60,7 @@ export default function MyBookings() {
                 <li key={b.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <span><strong>{b.booking_date}</strong> — {b.slot_label}</span>
                   {canCancelSlot(b) ? (
-                    <button type="button" className="btn-danger" onClick={() => handleCancel(b.id)}>Cancel</button>
+                    <button type="button" className="btn-danger" data-testid={`cancel-${b.id}`} onClick={() => handleCancel(b.id)}>Cancel</button>
                   ) : (
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Cancel window passed</span>
                   )}

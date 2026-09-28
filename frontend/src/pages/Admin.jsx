@@ -52,7 +52,7 @@ export default function Admin() {
 
       <div className="card" style={{ marginBottom: '1rem' }}>
         <label style={{ marginRight: '0.5rem' }}>Date:</label>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <input type="date" data-testid="admin-date" value={date} onChange={(e) => setDate(e.target.value)} />
       </div>
 
       {error && <p className="error-msg">{error}</p>}

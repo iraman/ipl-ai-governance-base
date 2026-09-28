@@ -6,9 +6,15 @@ const store = require('./store');
 
 const app = express();
 
-// Configure CORS with proper headers and credentials support
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:5174',
+  'http://127.0.0.1:5174',
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -194,5 +200,9 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Shuttle booking API at http://localhost:${PORT}`));
+module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => console.log(`Shuttle booking API at http://localhost:${PORT}`));
+}

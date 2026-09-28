@@ -82,6 +82,7 @@ export default function Login() {
           type="button"
           className="btn-primary"
           style={{ width: '100%', marginBottom: '1rem' }}
+          data-testid="trimble-login"
           onClick={handleTrimbleLogin}
           disabled={usingTrimbleAuth}
         >
@@ -101,6 +102,7 @@ export default function Login() {
             <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Email</label>
             <input
               type="email"
+              data-testid="email-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. testuser1@company.com"
@@ -108,7 +110,7 @@ export default function Login() {
               autoComplete="email"
             />
           </div>
-          <button type="submit" className="btn-secondary" style={{ width: '100%' }}>
+          <button type="submit" className="btn-secondary" data-testid="email-login" style={{ width: '100%' }}>
             Sign in with Email
           </button>
         </form>

@@ -21,12 +21,12 @@ export default function App() {
     <div className="app-shell">
       {user && (
         <nav className="nav">
-          <NavLink to="/" end>Book Shuttle</NavLink>
-          <NavLink to="/my-bookings">My Bookings</NavLink>
-          <NavLink to="/admin">Admin</NavLink>
+          <NavLink to="/" end data-testid="nav-book">Book Shuttle</NavLink>
+          <NavLink to="/my-bookings" data-testid="nav-bookings">My Bookings</NavLink>
+          <NavLink to="/admin" data-testid="nav-admin">Admin</NavLink>
           <div className="nav-user">
-            <span>{user.name}</span>
-            <button type="button" className="btn-secondary" onClick={logout}>Log out</button>
+            <span data-testid="nav-user">{user.name}</span>
+            <button type="button" className="btn-secondary" data-testid="logout" onClick={logout}>Log out</button>
           </div>
         </nav>
       )}
