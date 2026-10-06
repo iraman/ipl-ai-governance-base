@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../spec-driven-dev"
+		}
+	],
+	"settings": {}
+}

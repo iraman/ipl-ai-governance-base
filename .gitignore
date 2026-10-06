@@ -18,6 +18,13 @@ backend/dist/
 .DS_Store
 Thumbs.db
 
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+dist/
+
 # IDE
 .idea/
 .vscode/

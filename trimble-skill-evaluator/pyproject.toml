@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trimble-skill-evaluator"
+version = "0.1.0"
+description = "Hackathon prototype for validating and benchmarking AI agent skills."
+requires-python = ">=3.11"
+dependencies = [
+  "typer",
+  "pydantic>=2.0",
+  "rich",
+  "scikit-learn",
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+embeddings = ["fastembed"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+tse = "tse.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tse"]
