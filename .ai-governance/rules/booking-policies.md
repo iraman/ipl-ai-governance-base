@@ -21,8 +21,9 @@ Implementation reference: `getBookingCutoff()` and `isPastBookingCutoff()` in `b
 
 - **2 consecutive no-shows** → user can sign in but **cannot book for 1 day**
 - The Book page and `POST /api/bookings` keep this hard block. They do not accept an urgent override.
-- Chat only (`POST /api/chat/bookings`): a blocked employee may book one trip when `validateUrgentOverride()` accepts `medical_emergency`, `family_emergency`, or `client_visit` plus an explanation of 15–500 characters. `blocked_until` stays in place. Source: `prd/workride-chat-prd.md`.
-- Implementation reference: `getConsecutiveNoShows()`, `updateBlockIfNeeded()`, `isUserBlocked()`, `validateUrgentOverride()` in `backend/rules.js`
+- Chat only (`POST /api/chat/bookings`): a blocked employee may book one trip when the employee explains why they missed the two shuttles that caused the block. `validateUrgentOverride()` must accept `medical_emergency`, `family_emergency`, or `client_visit` (an unplanned client visit) plus an explanation of 15–500 characters. The booking records the missed shuttles in `override_no_show_ids`. `blocked_until` stays in place. Source: `prd/workride-chat-prd.md`.
+- The reason is about the missed shuttles, never about the new trip. WorkRide books seats on the four fixed office shuttle departures; it is not a cab or on-demand ride service.
+- Implementation reference: `getConsecutiveNoShows()`, `getBlockingNoShows()`, `updateBlockIfNeeded()`, `isUserBlocked()`, `validateUrgentOverride()` in `backend/rules.js`
 
 ## Booking limits
 

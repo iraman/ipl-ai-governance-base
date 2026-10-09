@@ -27,13 +27,14 @@ describe('PRD grill', () => {
 
   it('offers no option the security policy rules out', () => {
     assert.deepEqual(problemsOf(/security policy/), []);
-    const bad = { ...result.questions[0], options: ['Keep email login in production', 'Store the token in localStorage'] };
+    const bad = { ...result.open[0], options: ['Keep email login in production', 'Store the token in localStorage'] };
     assert.equal(checkQuestion(bad, trace).filter((p) => p.includes('security policy')).length, 2);
   });
 
   it('records who decided, when, and what changes for every answered question', () => {
     assert.deepEqual(problemsOf(/answered question/), []);
-    const incomplete = { ...result.questions[0], status: 'answered', answer: 'One per block' };
+    const open = result.open[0];
+    const incomplete = { ...open, status: 'answered', answer: 'One per block' };
     const problems = checkQuestion(incomplete, trace);
     for (const field of ['decidedBy', 'decidedOn', 'action']) assert.ok(problems.some((p) => p.includes(field)), field);
   });

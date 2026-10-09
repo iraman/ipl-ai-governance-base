@@ -328,7 +328,7 @@
       "cancelled_at": "2026-10-09 07:04:55",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Hospital visit and I still need the shuttle.",
+      "override_explanation": "My father was in hospital, so I missed both shuttles.",
       "override_source": "chat"
     },
     {
@@ -440,7 +440,7 @@
       "cancelled_at": "2026-10-09 07:05:24",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Doctor appointment near the office in the morning.",
+      "override_explanation": "I was at the doctor with a fever, so I missed both shuttles.",
       "override_source": "chat"
     },
     {
@@ -482,7 +482,7 @@
       "cancelled_at": "2026-10-09 07:13:00",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Doctor appointment near the office in the morning.",
+      "override_explanation": "I was at the doctor with a fever, so I missed both shuttles.",
       "override_source": "chat"
     },
     {
@@ -496,7 +496,7 @@
       "cancelled_at": "2026-10-09 07:24:24",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Hospital appointment for my father early morning",
+      "override_explanation": "My father was in hospital, so I missed both shuttles.",
       "override_source": "chat"
     },
     {
@@ -510,7 +510,7 @@
       "cancelled_at": "2026-10-09 10:29:35",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Hospital appointment for my father early morning.",
+      "override_explanation": "My father was in hospital, so I missed both shuttles.",
       "override_source": "chat"
     },
     {
@@ -524,7 +524,7 @@
       "cancelled_at": "2026-10-09 11:03:22",
       "no_show_at": null,
       "override_category": "medical_emergency",
-      "override_explanation": "Hospital appointment for my father early morning.",
+      "override_explanation": "My father was in hospital, so I missed both shuttles.",
       "override_source": "chat"
     }
   ],

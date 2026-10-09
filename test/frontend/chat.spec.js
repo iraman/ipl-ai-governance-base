@@ -36,7 +36,7 @@ test.describe('chat booking', () => {
     await expect(page.getByText(date)).toBeVisible();
   });
 
-  test('keeps the Book page blocked and allows a medical emergency in chat', async ({ page }) => {
+  test('keeps the Book page blocked and accepts a medical emergency as the reason for the missed shuttles', async ({ page }) => {
     await blockUser(2);
     await loginAs(page, 'testuser1@company.com');
     await expect(page.getByText(/Booking is blocked until/i)).toBeVisible();
@@ -48,8 +48,9 @@ test.describe('chat booking', () => {
     await page.getByTestId('chat-slot').selectOption({ label: '6:00 PM - Office to Metro' });
     await page.getByTestId('chat-send').click();
     await expect(page.getByTestId('chat-urgent-category')).toBeVisible();
+    await expect(page.getByText('Why did you miss your last two shuttles?')).toBeVisible();
     await page.getByTestId('chat-urgent-category').selectOption('medical_emergency');
-    await page.getByTestId('chat-urgent-explanation').fill('Hospital appointment and I need the office shuttle.');
+    await page.getByTestId('chat-urgent-explanation').fill('My father was in hospital, so I missed both shuttles.');
     await page.getByTestId('chat-urgent-send').click();
 
     const note = page.getByTestId('policy-override-note');

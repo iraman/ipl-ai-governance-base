@@ -60,7 +60,7 @@ describe('booking rules', () => {
   });
 
   it('accepts only the three urgent categories with a 15 to 500 character explanation', () => {
-    const explanation = 'Hospital visit and I still need the shuttle.';
+    const explanation = 'My father was in hospital, so I missed both shuttles.';
     for (const category of ['medical_emergency', 'family_emergency', 'client_visit']) {
       const result = rules.validateUrgentOverride({ category, explanation });
       assert.equal(result.ok, true);
@@ -73,10 +73,10 @@ describe('booking rules', () => {
     assert.equal(rules.validateUrgentOverride({ category: 'medical_emergency', explanation: 'x'.repeat(501) }).ok, false);
     const trimmed = rules.validateUrgentOverride({
       category: 'client_visit',
-      explanation: '   Client visit this afternoon.   ',
+      explanation: '   I was at a client site both mornings.   ',
     });
     assert.equal(trimmed.ok, true);
-    assert.equal(trimmed.explanation, 'Client visit this afternoon.');
+    assert.equal(trimmed.explanation, 'I was at a client site both mornings.');
   });
 
   it('rejects weekends and listed public holidays', () => {
@@ -92,4 +92,17 @@ describe('booking rules', () => {
       assert.equal(rules.validateUrgentOverride({ category, explanation }).ok, false, category);
     }
     assert.equal(rules.validateUrgentOverride({ category: ['medical_emergency'], explanation }).ok, false);
-  });});
+  });
+
+  it('returns the consecutive missed shuttles that an override reason must explain', () => {
+    const rows = [
+      { id: 9, status: 'no_show' },
+      { id: 8, status: 'no_show' },
+      { id: 7, status: 'booked' },
+      { id: 6, status: 'no_show' },
+    ];
+    assert.deepEqual(rules.getBlockingNoShows(() => rows).map((r) => r.id), [9, 8]);
+    assert.equal(rules.getConsecutiveNoShows(() => rows), 2);
+    assert.deepEqual(rules.getBlockingNoShows(() => [{ id: 1, status: 'booked' }]), []);
+  });
+});

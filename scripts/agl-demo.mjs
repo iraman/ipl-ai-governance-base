@@ -102,6 +102,26 @@ const SCENARIOS = [
     ],
   },
   {
+    id: 'wrong-requirement',
+    title: 'A requirement that was wrong',
+    story:
+      'The first chat PRD asked why the new trip was urgent ("a real reason to ride"), as if WorkRide were a cab service. WorkRide books office shuttle seats; the valid reason is why the employee missed the two shuttles that caused the block.',
+    fix: 'The chat PRD was revised (decision Q-CHAT-08). Tests and asset checks now fail on trip-reason wording, the bot asks "Why did you miss your last two shuttles?", and bookings record the missed shuttles in override_no_show_ids.',
+    skill: 'validate-chat-override',
+    edits: [
+      {
+        file: 'prd/workride-chat-prd.md',
+        find: 'The reason is about the missed shuttles, not the trip being booked. The trip is an ordinary seat on one of the four fixed shuttle departures.',
+        replace: 'A medical emergency, a family emergency, or a same-day client visit can still be a real reason to ride.',
+      },
+      {
+        file: 'frontend/src/pages/Chat.jsx',
+        find: 'Why did you miss them? Choose a medical emergency, a family emergency, or an unplanned client visit, and explain what happened.',
+        replace: 'Choose a medical emergency, a family emergency, or a same-day client visit, and explain why this trip is urgent.',
+      },
+    ],
+  },
+  {
     id: 'architecture',
     title: 'A page that bypasses the API client',
     story:
@@ -254,7 +274,7 @@ function renderHtml(report) {
 <body>
 <header id="intro">
   <h1>Agent Governance Lifecycle — Trimble WorkRide</h1>
-  <p>Six ways an AI agent can break WorkRide's rules, PRD, or architecture, and the AGL gate that blocks each one.</p>
+  <p>Seven ways an AI agent or a wrong requirement can break WorkRide's rules, PRD, or architecture, and the AGL gate that blocks each one.</p>
   <p>Each change was applied to a throwaway copy of the repo; the real repo was not modified. Generated ${escapeHtml(report.generatedAt)}.</p>
   <div class="flow"><span>PRD</span><span>→ Policy</span><span>→ Skill</span><span>→ evals.json</span><span>→ Skill evaluator</span><span>→ CI gate</span><span>→ Manifest hash</span><span>→ decision_trace</span></div>
 </header>

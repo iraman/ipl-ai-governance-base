@@ -10,6 +10,7 @@
     { "file": "test/governance/prd.test.mjs", "name": "traces every requirement to text that still exists in the PRD, policy, and code" },
     { "file": "test/governance/prd.test.mjs", "name": "declares a gap for every requirement without code or tests" },
     { "file": "test/governance/prd.test.mjs", "name": "keeps the policy free of limits the plan rules out" },
+    { "file": "test/governance/prd.test.mjs", "name": "keeps every PRD inside the shuttle-only product scope" },
     { "file": "test/governance/prd.test.mjs", "name": "traces every business rule in rules.js to a requirement" }
   ],
   "assets": [

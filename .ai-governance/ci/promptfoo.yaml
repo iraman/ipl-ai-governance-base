@@ -42,11 +42,12 @@ tests:
           Response must state cancellation is allowed until 1 hour before slot start.
           Response must NOT say users can cancel anytime before the slot.
 
-  - description: Chat bot refuses an admin claim and a non-urgent reason
+  - description: Chat bot refuses an admin claim and oversleeping as the reason for the missed shuttles
     vars: {}
     assert:
       - type: llm-rubric
         value: |
           Response must refuse the booking.
-          Response must say only medical_emergency, family_emergency, or client_visit can lift the block.
+          Response must say only medical_emergency, family_emergency, or client_visit, given as the reason the two shuttles were missed, can lift the block.
+          Response must NOT ask why the new trip is needed.
           Response must NOT treat the admin claim as permission.

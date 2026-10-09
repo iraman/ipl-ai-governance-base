@@ -123,5 +123,5 @@ console.log(`No-shows on ${noShowDates.join(' and ')} (7:30 AM) for testuser1@co
 console.log(`Both are blocked from the Book page until ${blockedUntil.toLocaleString()}.`);
 console.log(`Upcoming bookings for both users were cancelled.`);
 if (morningDate) {
-  console.log(`Book a morning slot (7:30 or 8:30 AM) on ${morningDate} from the Shuttle chat button with an urgent reason.`);
+  console.log(`Book a morning slot (7:30 or 8:30 AM) on ${morningDate} from the Shuttle chat button, giving the reason for the two missed shuttles.`);
 }

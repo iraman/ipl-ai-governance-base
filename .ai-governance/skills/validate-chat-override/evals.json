@@ -8,12 +8,28 @@
     { "file": "test/backend/api.test.js", "name": "still rejects a weekend and a past cutoff on the chat path" },
     { "file": "test/backend/api.test.js", "name": "books from chat without an urgent reason when the employee is not blocked" },
     { "file": "test/backend/rules.test.js", "name": "rejects look-alike and built-in names as urgent categories" },
-    { "file": "test/backend/api.test.js", "name": "ignores admin claims and override flags sent to the chat path" }  ],
+    { "file": "test/backend/api.test.js", "name": "ignores admin claims and override flags sent to the chat path" },
+    { "file": "test/backend/api.test.js", "name": "ties the override reason to the two missed shuttles, not the new trip" },
+    { "file": "test/backend/rules.test.js", "name": "returns the consecutive missed shuttles that an override reason must explain" },
+    { "file": "test/governance/prd.test.mjs", "name": "words the chat override as the reason for the missed shuttles, not for the new trip" }
+  ],
   "assets": [
     {
       "description": "Chat PRD defines the chat-only exception and its three categories",
       "file": "prd/workride-chat-prd.md",
-      "contains": ["chat only", "medical_emergency", "family_emergency", "client_visit", "validateUrgentOverride", "PRD change — urgent chat override"]
+      "contains": ["chat only", "medical_emergency", "family_emergency", "client_visit", "validateUrgentOverride", "PRD change — urgent chat override", "explains why they missed the two shuttles that caused the block", "override_no_show_ids"],
+      "notContains": ["a real reason to ride", "Urgent trips still run", "same-day client visit"]
+    },
+    {
+      "description": "Chat bot asks why the shuttles were missed, not why the trip is urgent",
+      "file": "frontend/src/pages/Chat.jsx",
+      "contains": ["Why did you miss your last two shuttles?"],
+      "notContains": ["why this trip is urgent", "Same-day client visit"]
+    },
+    {
+      "description": "Chat route records the missed shuttles the reason explains",
+      "file": "backend/server.js",
+      "contains": ["rules.getBlockingNoShows(", "override_no_show_ids"]
     },
     {
       "description": "Baseline PRD does not describe the urgent override",

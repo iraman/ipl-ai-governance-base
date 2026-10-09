@@ -141,7 +141,15 @@ const store = {
       (b) => b.user_id === user_id && b.booking_date === booking_date && b.status === 'booked'
     );
   },
-  createBooking({ user_id, slot_id, booking_date, override_category = null, override_explanation = null, override_source = null }) {
+  createBooking({
+    user_id,
+    slot_id,
+    booking_date,
+    override_category = null,
+    override_explanation = null,
+    override_source = null,
+    override_no_show_ids = null,
+  }) {
     const id = nextId('bookings');
     const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const row = {
@@ -157,6 +165,7 @@ const store = {
       override_category,
       override_explanation,
       override_source,
+      override_no_show_ids,
     };
     state.bookings.push(row);
     save();

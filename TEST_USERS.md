@@ -40,7 +40,7 @@ The script:
 
 ## Demo: chat overrides the no-show block
 
-`testuser1@company.com` and `testuser2@company.com` are blocked from the Book page and can still book a morning shuttle from the **Shuttle chat** button with an urgent reason.
+`testuser1@company.com` and `testuser2@company.com` are blocked from the Book page and can still book a morning shuttle from the **Shuttle chat** button by explaining why they missed their last two shuttles.
 
 1. **Stop the backend.**
 2. Run:
@@ -56,7 +56,7 @@ The script:
 - Cancels both users’ upcoming bookings, so any morning slot is free.
 - Prints the next date whose morning cutoff (8 PM the night before) has not passed.
 
-In the app, sign in as either user. The Book page shows **Booking is blocked until…**. Open **Shuttle chat**, pick that date and 7:30 or 8:30 AM, then choose a medical emergency, family emergency, or same-day client visit and explain it in at least 15 characters. Chat books the trip and shows the policy-override note. The Book page stays blocked.
+In the app, sign in as either user. The Book page shows **Booking is blocked until…**. Open **Shuttle chat**, pick that date and 7:30 or 8:30 AM, then say why you missed the last two shuttles: a medical emergency, a family emergency, or an unplanned client visit, explained in at least 15 characters (for example, "My father was in hospital, so I missed both shuttles."). Chat books the shuttle seat and shows the policy-override note. The Book page stays blocked.
 
 Re-run the script before each demo: the block lasts 1 day, and a booked date cannot be booked again.
 

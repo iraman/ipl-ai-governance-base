@@ -109,7 +109,7 @@ To add a skill, create `skills/<name>/SKILL.md` and `skills/<name>/evals.json`, 
 ## Demo
 
 ```bash
-npm run agl:demo    # six ungoverned changes, each applied to a throwaway copy of the repo
+npm run agl:demo    # seven ungoverned changes, each applied to a throwaway copy of the repo
 npm run agl:video   # records test-results/agl-demo.webm (needs the app running with testuser1 blocked)
 ```
 
@@ -120,6 +120,7 @@ npm run agl:video   # records test-results/agl-demo.webm (needs the app running 
 | Talking the chat bot past the rules | Chat route trusts `is_admin` from the request | `validate-chat-override` |
 | A quiet change to the rules | Cancel window edited to 30 minutes without review | Manifest check, regression tests, `validate-booking-rules` |
 | Code that no longer matches the PRD | Morning cutoff moved to 9 PM in `rules.js` only | PRD evaluator, `validate-prd`, `validate-booking-rules` |
+| A requirement that was wrong | Chat PRD and bot ask why the new trip is urgent, as if WorkRide were a cab service | `validate-chat-override` |
 | A page that bypasses the API client | `fetch` added straight into `Book.jsx` | `enforce-architecture` |
 
 `agl:demo` writes `test-results/agl-demo.html` and exits 1 if any change gets through or the real repo fails a gate.

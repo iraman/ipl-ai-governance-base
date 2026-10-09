@@ -18,13 +18,14 @@ Questions: `prd/questions.json`. Next question: `npm run prd:grill`. Gaps come f
 
 ## Procedure
 
-1. Run `npm run prd:grill`. It prints the highest-priority open question, its owner, its options, and the gap behind it.
-2. Ask that one question, and only that question. In Cursor, use the AskQuestion tool with the options from `prd/questions.json`, recommended option first. Say who owns the decision.
-3. Wait for the answer. Do not answer for the user, guess, or pick the recommended option on their behalf.
-4. If the answer opens a new question, add it to `prd/questions.json` with the same requirement, an owner, a priority, and at least two options.
-5. Record the answer in `prd/questions.json`: `status: "answered"`, `answer`, `decidedBy`, `decidedOn` (YYYY-MM-DD), and `action` — the PRD, traceability, or code change it leads to.
-6. Carry out the action with `validate-prd`: write a change PRD rather than editing an Agreed baseline, then update the requirement's quotes, tests, or `gap` in `prd/traceability.json`.
-7. Repeat from step 1 until no questions are open or the user stops. Run `npm run prd:grill`, `npm run prd:eval`, and `npm run skills:eval`.
+1. For any exception to a rule, first ask what the reason must explain and check it fits what the product does. WorkRide books seats on the office shuttle, so a reason can explain the missed shuttles behind a block; it never justifies a trip the way a cab booking would. `Q-CHAT-08` records the case where this was missed.
+2. Run `npm run prd:grill`. It prints the highest-priority open question, its owner, its options, and the gap behind it.
+3. Ask that one question, and only that question. In Cursor, use the AskQuestion tool with the options from `prd/questions.json`, recommended option first. Say who owns the decision.
+4. Wait for the answer. Do not answer for the user, guess, or pick the recommended option on their behalf.
+5. If the answer opens a new question, add it to `prd/questions.json` with the same requirement, an owner, a priority, and at least two options.
+6. Record the answer in `prd/questions.json`: `status: "answered"`, `answer`, `decidedBy`, `decidedOn` (YYYY-MM-DD), and `action` — the PRD, traceability, or code change it leads to.
+7. Carry out the action with `validate-prd`: write a change PRD rather than editing an Agreed baseline, then update the requirement's quotes, tests, or `gap` in `prd/traceability.json`. If the answer shows the requirement itself was wrong, add a `**Revision:**` line to the PRD and a test that fails on the old wording.
+8. Repeat from step 2 until no questions are open or the user stops. Run `npm run prd:grill`, `npm run prd:eval`, and `npm run skills:eval`.
 
 ## Output checklist
 
@@ -43,6 +44,7 @@ Test cases are in `evals.json` next to this file. Run them with `npm run skills:
 ## Do not
 
 - Ask several questions at once or bundle two decisions into one question
+- Accept an exception without asking what its reason must explain, or a reason about something the product does not do
 - Answer a question yourself, or record a decision the user did not make
 - Write code for a requirement whose question is still open
 - Ask about requirements that are already traced, or invent gaps that `prd/traceability.json` does not declare

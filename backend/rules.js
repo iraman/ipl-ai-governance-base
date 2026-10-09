@@ -75,13 +75,17 @@ function canCancel(booking, slot, now = new Date()) {
 
 /** Consecutive no-shows: count from most recent backwards. */
 function getConsecutiveNoShows(getBookingsForUser) {
-  const rows = getBookingsForUser();
-  let count = 0;
-  for (const r of rows) {
-    if (r.status === 'no_show') count++;
-    else break;
+  return getBlockingNoShows(getBookingsForUser).length;
+}
+
+/** The consecutive no-shows, most recent first. A chat override reason must explain these missed shuttles. */
+function getBlockingNoShows(getBookingsForUser) {
+  const missed = [];
+  for (const r of getBookingsForUser()) {
+    if (r.status !== 'no_show') break;
+    missed.push(r);
   }
-  return count;
+  return missed;
 }
 
 /** Set blocked_until to now + 1 day if user has 2+ consecutive no-shows. */
@@ -104,27 +108,27 @@ function isUserBlocked(user) {
 const URGENT_CATEGORIES = {
   medical_emergency: 'Medical emergency',
   family_emergency: 'Family emergency',
-  client_visit: 'Same-day client visit',
+  client_visit: 'Unplanned client visit',
 };
 
 /**
- * Chat override for a blocked employee.
- * Category must be one of the three urgent reasons.
- * Explanation must be 15–500 characters after trimming.
+ * Chat override for a blocked employee: the reason the employee missed the shuttles that caused the block.
+ * It never justifies the new trip; WorkRide books office shuttle seats only.
+ * Category must be one of the three reasons. Explanation must be 15–500 characters after trimming.
  */
 function validateUrgentOverride({ category, explanation } = {}) {
   if (typeof category !== 'string' || !Object.prototype.hasOwnProperty.call(URGENT_CATEGORIES, category)) {
     return {
       ok: false,
-      reason: 'A valid urgent reason is required: medical emergency, family emergency, or same-day client visit.',
+      reason: 'Tell me why you missed your last two shuttles: a medical emergency, a family emergency, or an unplanned client visit.',
     };
   }
   const text = typeof explanation === 'string' ? explanation.trim() : '';
   if (text.length < 15) {
-    return { ok: false, reason: 'Explain the urgent request in at least 15 characters.' };
+    return { ok: false, reason: 'Explain why you missed the two shuttles in at least 15 characters.' };
   }
   if (text.length > 500) {
-    return { ok: false, reason: 'The urgent explanation must be 500 characters or fewer.' };
+    return { ok: false, reason: 'The explanation must be 500 characters or fewer.' };
   }
   return { ok: true, category, explanation: text, label: URGENT_CATEGORIES[category] };
 }
@@ -166,6 +170,7 @@ module.exports = {
   isSlotStartInPast,
   canCancel,
   getConsecutiveNoShows,
+  getBlockingNoShows,
   updateBlockIfNeeded,
   isUserBlocked,
   URGENT_CATEGORIES,

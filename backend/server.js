@@ -143,13 +143,20 @@ app.post('/api/chat/bookings', (req, res) => {
     });
     if (blocked) {
       const urgent = rules.validateUrgentOverride({ category: urgent_category, explanation: urgent_explanation });
-      const urgentStep = { check: 'Urgent chat override', skill: CHAT_SKILL, rule: 'validateUrgentOverride()', source: CHAT_PRD };
+      const urgentStep = { check: 'Reason for the missed shuttles', skill: CHAT_SKILL, rule: 'validateUrgentOverride()', source: CHAT_PRD };
       if (!urgent.ok) return refuse(403, urgent.reason, urgentStep);
-      trace.push({ ...urgentStep, passed: true, result: `Accepted: ${urgent.label}` });
+      const missed = rules.getBlockingNoShows(() => store.getBookingsForConsecutiveNoShow(user.id)).slice(0, 2);
+      const missedDates = missed.map((b) => b.booking_date).join(' and ');
+      trace.push({
+        ...urgentStep,
+        passed: true,
+        result: missed.length ? `Accepted: ${urgent.label} explains the missed shuttles on ${missedDates}` : `Accepted: ${urgent.label}`,
+      });
       override = {
         override_category: urgent.category,
         override_explanation: urgent.explanation,
         override_source: 'chat',
+        override_no_show_ids: missed.map((b) => b.id),
       };
     }
 

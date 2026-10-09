@@ -44,7 +44,7 @@ Source: `prd/workride-chat-prd.md`. Baseline `prd/workride-prd.md` stays as writ
 
 Old line: **2 consecutive no-shows, blocked 1 day, no exception.**
 
-New line, chat only: a blocked employee may book from `POST /api/chat/bookings` when `validateUrgentOverride()` accepts `urgent_category` of `medical_emergency`, `family_emergency`, or `client_visit` and an explanation of 15–500 characters. The Book page and `POST /api/bookings` still refuse the booking.
+New line, chat only: a blocked employee may book from `POST /api/chat/bookings` by explaining why they missed the two shuttles that caused the block. `validateUrgentOverride()` must accept `urgent_category` of `medical_emergency`, `family_emergency`, or `client_visit` and an explanation of 15–500 characters. The reason is never about the new trip. The Book page and `POST /api/bookings` still refuse the booking.
 
 The full procedure and checklist for this exception are in `.ai-governance/skills/validate-chat-override/SKILL.md`.
 

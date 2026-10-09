@@ -2,6 +2,22 @@
   "description": "Open questions for PRD gaps in prd/traceability.json, asked one at a time by the grill-prd skill. An answered question records who decided, when, and what changes. Run npm run prd:grill for the next question.",
   "questions": [
     {
+      "id": "Q-CHAT-08",
+      "requirement": "CHAT-08",
+      "priority": 1,
+      "owner": "Product owner",
+      "question": "The reason must explain why the employee missed the two shuttles that caused the block, not why they need the new trip. Which reasons are valid for those missed shuttles?",
+      "options": [
+        "Only emergencies: medical emergency and family emergency; drop client visit (Recommended)",
+        "Keep all three: medical emergency, family emergency, and an unplanned client visit that made them miss the shuttle"
+      ],
+      "status": "answered",
+      "answer": "Keep all three: medical emergency, family emergency, and an unplanned client visit that made them miss the shuttle. WorkRide books office shuttle seats only, so the reason is for the missed shuttles, never for the new trip.",
+      "decidedBy": "Product owner (iraman)",
+      "decidedOn": "2026-10-09",
+      "action": "Revised prd/workride-chat-prd.md and booking-policies.md; the chat bot asks why the shuttles were missed; bookings record override_no_show_ids from getBlockingNoShows(); CHAT-08 added to prd/traceability.json with tests that fail on trip-reason wording."
+    },
+    {
       "id": "Q-REQ-11",
       "requirement": "REQ-11",
       "priority": 1,

@@ -2,8 +2,8 @@
   "version": 1,
   "framework": "AGL",
   "project": "trimble-workride",
-  "generatedAt": "2026-10-09T11:10:38.529Z",
-  "bundleHash": "1c776356ecbe382710d93b162543b073c716e76cd0a1220824beb400737813da",
+  "generatedAt": "2026-10-09T11:33:28.429Z",
+  "bundleHash": "03b89b6fbe721d5cac4eda32372b99c4b7f16632fa96bf1aed2af10d847f0ab9",
   "files": [
     {
       "path": ".ai-governance/ADOPTION.md",
@@ -15,7 +15,7 @@
     },
     {
       "path": ".ai-governance/README.md",
-      "sha256": "6195ea168737f5c8cac55ab4e227bd61360c5bf355939f08d5b202b16dec69ae"
+      "sha256": "5ef5367f528423c0751c5d3b4a39d9f2256dbed948079de38f62db9b10c78352"
     },
     {
       "path": ".ai-governance/architectural-standards.md",
@@ -23,7 +23,7 @@
     },
     {
       "path": ".ai-governance/ci/promptfoo.yaml",
-      "sha256": "a09856dc40d06e36fcb1ec1d2ced7ecb390cc553ea273eb93af3b16d6933e18c"
+      "sha256": "3dfb8b9e42fa6e50206e5e7c2b3bb213a25476ad5707b98a4288327d2465b257"
     },
     {
       "path": ".ai-governance/global-security-policy.md",
@@ -39,7 +39,7 @@
     },
     {
       "path": ".ai-governance/rules/booking-policies.md",
-      "sha256": "a768d39b4fbed275d16297bddd3926e2cbcb6f84e57ab3a0b06cb936a0845d5e"
+      "sha256": "734d3ad6cb60539d348567d990ecfcac2f74ccc8b029b8af73c49414cdee7295"
     },
     {
       "path": ".ai-governance/rules/trimble-id-auth.md",
@@ -63,7 +63,7 @@
     },
     {
       "path": ".ai-governance/skills/grill-prd/SKILL.md",
-      "sha256": "85f400aaf288ca610ddd26516557ef98c7be53f565eab3abc431992eb3c29460"
+      "sha256": "b4e39e316aa347bc68c828f06bfd07cf3de47e31f3131bfc3a63d51a6197040a"
     },
     {
       "path": ".ai-governance/skills/grill-prd/evals.json",
@@ -71,7 +71,7 @@
     },
     {
       "path": ".ai-governance/skills/validate-booking-rules/SKILL.md",
-      "sha256": "56b8081cf1d094b88e51e3b8251a30c1cd7348fcad916bb8d359476731d5c550"
+      "sha256": "48528426fe0e16c51469c27dc0e87c48e39a4a0022341cfa1ba464ca2819ef87"
     },
     {
       "path": ".ai-governance/skills/validate-booking-rules/evals.json",
@@ -79,11 +79,11 @@
     },
     {
       "path": ".ai-governance/skills/validate-chat-override/SKILL.md",
-      "sha256": "e4c52a477c46e4c93056ddf22afa4bbefcde1d6efc881347d6396566bcd879c2"
+      "sha256": "4c794a1bd9bebc26888fc9f212f0761638a628b27c7199ae6b82f9e14763a0bd"
     },
     {
       "path": ".ai-governance/skills/validate-chat-override/evals.json",
-      "sha256": "93e3020afe957cc2181ef36ae74ea66467175dea40bb018e126076956f45b605"
+      "sha256": "ff2f30645410b9f3dd4ea0fd0823c5974db531f3e75960435bf6da46d107e97a"
     },
     {
       "path": ".ai-governance/skills/validate-prd/SKILL.md",
@@ -91,7 +91,7 @@
     },
     {
       "path": ".ai-governance/skills/validate-prd/evals.json",
-      "sha256": "b6fcc4dddc16297b5b6c1e50d8ac7c656ab81aea959f87d9af290025afd1bc17"
+      "sha256": "1636ee27dbe77ebce7dd58ff3f71bfc9f2e7d57c71e7fdd75f9ed9f82ed6d58a"
     }
   ],
   "usage": "Reference bundleHash in PRs as AGL-MANIFEST when AI-generated code depends on this rule set."

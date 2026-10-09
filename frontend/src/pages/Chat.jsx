@@ -5,7 +5,7 @@ import { getSlots, getUser, getBookings, getSlotCanBook, getBookableDate, create
 const URGENT_OPTIONS = [
   { value: 'medical_emergency', label: 'Medical emergency' },
   { value: 'family_emergency', label: 'Family emergency' },
-  { value: 'client_visit', label: 'Same-day client visit' },
+  { value: 'client_visit', label: 'Unplanned client visit' },
 ];
 
 function isBlockedUser(person) {
@@ -47,7 +47,7 @@ export default function ChatWidget() {
     setMessages([{
       role: 'assistant',
       text: blocked
-        ? `The Book page is closed until ${new Date(userWithBlock.blocked_until).toLocaleString()} because of the no-show policy. Tell me the date and slot. If this trip is a medical emergency, a family emergency, or a same-day client visit, chat can still book it.`
+        ? `The Book page is closed until ${new Date(userWithBlock.blocked_until).toLocaleString()} because you missed your last two shuttles. Tell me the date and slot you need. If you missed them because of a medical emergency, a family emergency, or an unplanned client visit, chat can still book your next shuttle.`
         : 'Tell me the date and slot you need. Morning is metro to office at 7:30 and 8:30. Evening is office to metro at 5:00 and 6:00.',
     }]);
   }, [userWithBlock, messages.length]);
@@ -129,7 +129,7 @@ export default function ChatWidget() {
       setPhase('urgent');
       addMessage({
         role: 'assistant',
-        text: 'You are blocked from the Book page after two no-shows. Choose a medical emergency, a family emergency, or a same-day client visit, and explain why this trip is urgent.',
+        text: 'You are blocked from the Book page because you missed your last two shuttles. Why did you miss them? Choose a medical emergency, a family emergency, or an unplanned client visit, and explain what happened.',
       });
       return;
     }
@@ -142,15 +142,15 @@ export default function ChatWidget() {
     setError('');
     const explanation = urgentExplanation.trim();
     if (!urgentCategory) {
-      setError('Choose an urgent reason.');
+      setError('Choose why you missed your last two shuttles.');
       return;
     }
     if (explanation.length < 15) {
-      setError('Explain the urgent request in at least 15 characters.');
+      setError('Explain why you missed the two shuttles in at least 15 characters.');
       return;
     }
     if (explanation.length > 500) {
-      setError('The urgent explanation must be 500 characters or fewer.');
+      setError('The explanation must be 500 characters or fewer.');
       return;
     }
     const label = URGENT_OPTIONS.find((option) => option.value === urgentCategory)?.label || urgentCategory;
@@ -251,7 +251,7 @@ export default function ChatWidget() {
           <form onSubmit={handleUrgent}>
             <div style={{ display: 'grid', gap: '1rem', maxWidth: '420px' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Urgent reason</label>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Why did you miss your last two shuttles?</label>
                 <select
                   data-testid="chat-urgent-category"
                   value={urgentCategory}
@@ -271,6 +271,7 @@ export default function ChatWidget() {
                   value={urgentExplanation}
                   onChange={(e) => setUrgentExplanation(e.target.value)}
                   rows={3}
+                  placeholder="What happened on the days you missed the shuttle?"
                   required
                   style={{ width: '100%', resize: 'vertical' }}
                 />

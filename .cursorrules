@@ -26,7 +26,7 @@ Before generating or modifying code, read and follow:
    - Must match `backend/rules.js`
    - Morning book by 8 PM prior day; evening by 3 PM same day
    - Cancel until 1 hour before slot; 2 no-shows → 1-day booking block
-   - Chat may override that one-day block only for a valid urgent reason; see the “PRD change — urgent chat override” section in `.ai-governance/skills/validate-chat-override/SKILL.md`
+   - Chat may override that one-day block only when the employee gives a valid reason (medical emergency, family emergency, unplanned client visit) for the two missed shuttles that caused it, never a reason for the new trip; see the “PRD change — urgent chat override” section in `.ai-governance/skills/validate-chat-override/SKILL.md`
 
 6. **Skills** — use `.ai-governance/skills/validate-booking-rules/SKILL.md` when changing booking flows, `.ai-governance/skills/validate-chat-override/SKILL.md` when changing the chat booking path, `.ai-governance/skills/enforce-safe-errors/SKILL.md` when adding routes or error handling, `.ai-governance/skills/validate-prd/SKILL.md` when changing a PRD or a rule a PRD depends on, `.ai-governance/skills/grill-prd/SKILL.md` before agreeing a PRD or building a requirement with an open gap (ask one question at a time; `npm run prd:grill`), and `.ai-governance/skills/enforce-architecture/SKILL.md` when adding packages, files, routes, or pages
    - PRD requirements are traced in `prd/traceability.json`; run `npm run prd:eval`

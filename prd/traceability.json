@@ -131,6 +131,23 @@
       ]
     },
     {
+      "id": "CHAT-08",
+      "title": "The reason explains the two missed shuttles, not the new trip",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "explains why they missed the two shuttles that caused the block" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "explains why they missed the two shuttles that caused the block" },
+      "code": [
+        { "file": "backend/server.js", "quote": "rules.getBlockingNoShows(" },
+        { "file": "backend/server.js", "quote": "override_no_show_ids: missed.map((b) => b.id)" },
+        { "file": "frontend/src/pages/Chat.jsx", "quote": "Why did you miss your last two shuttles?" }
+      ],
+      "rules": ["getBlockingNoShows", "validateUrgentOverride"],
+      "tests": [
+        { "file": "test/backend/api.test.js", "name": "ties the override reason to the two missed shuttles, not the new trip" },
+        { "file": "test/backend/rules.test.js", "name": "returns the consecutive missed shuttles that an override reason must explain" },
+        { "file": "test/governance/prd.test.mjs", "name": "words the chat override as the reason for the missed shuttles, not for the new trip" }
+      ]
+    },
+    {
       "id": "CHAT-02",
       "title": "Urgent explanation is 15 to 500 characters after trimming",
       "prd": { "file": "prd/workride-chat-prd.md", "quote": "15 to 500 characters after trimming" },
@@ -154,7 +171,7 @@
     {
       "id": "CHAT-04",
       "title": "Override booking is tagged and the block stays in place",
-      "prd": { "file": "prd/workride-chat-prd.md", "quote": "That booking is tagged with the category, the explanation, and source `chat`. `blocked_until` stays in place." },
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "That booking is tagged with the category, the explanation, and source `chat`." },
       "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "`blocked_until` stays in place." },
       "code": [
         { "file": "backend/server.js", "quote": "override_source: 'chat'" },

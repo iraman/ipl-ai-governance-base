@@ -4,6 +4,11 @@ import { evaluatePrdsStatic, read } from '../../scripts/lib/prd-checks.mjs';
 
 const result = evaluatePrdsStatic();
 
+// WorkRide books seats on the four fixed office shuttle departures. A **Revision:** header may name a past mistake.
+const OUT_OF_SCOPE = [/\bcabs?\b/i, /\btaxis?\b/i, /on-demand ride/i, /pickup address/i, /drop-off address/i, /door-to-door/i];
+const TRIP_REASON = [/reason to ride/i, /why this trip is urgent/i, /urgent trips? still run/i, /same-day client visit/i];
+const requirementsText = (file) => read(file).split('\n## Problem\n')[1] || '';
+
 describe('PRD evaluation', () => {
   it('lists every PRD in prd/traceability.json', () => {
     assert.deepEqual(result.unlisted, [], `add to prd/traceability.json: ${result.unlisted.join(', ')}`);
@@ -60,6 +65,28 @@ describe('PRD evaluation', () => {
     for (const term of ['5 waitlist', '30 calendar days', '2 bookings per date']) {
       assert.ok(!policy.includes(term), `booking-policies.md still states "${term}"`);
     }
+  });
+
+  it('keeps every PRD inside the shuttle-only product scope', () => {
+    for (const file of result.trace.prds) {
+      const text = requirementsText(file);
+      for (const pattern of OUT_OF_SCOPE) {
+        assert.doesNotMatch(text, pattern, `${file} describes something WorkRide does not do`);
+      }
+    }
+  });
+
+  it('words the chat override as the reason for the missed shuttles, not for the new trip', () => {
+    const prd = requirementsText('prd/workride-chat-prd.md');
+    assert.ok(prd.includes('explains why they missed the two shuttles that caused the block'), 'chat PRD');
+    assert.ok(prd.includes('The reason is about the missed shuttles, not the trip being booked.'), 'chat PRD');
+    assert.ok(read('.ai-governance/rules/booking-policies.md').includes('explains why they missed the two shuttles'), 'booking policy');
+    assert.ok(read('frontend/src/pages/Chat.jsx').includes('Why did you miss your last two shuttles?'), 'chat bot');
+    const files = ['.ai-governance/rules/booking-policies.md', '.ai-governance/skills/validate-chat-override/SKILL.md', 'frontend/src/pages/Chat.jsx', 'backend/rules.js'];
+    for (const file of files) {
+      for (const pattern of TRIP_REASON) assert.doesNotMatch(read(file), pattern, file);
+    }
+    for (const pattern of TRIP_REASON) assert.doesNotMatch(prd, pattern, 'prd/workride-chat-prd.md');
   });
 
   it('traces every business rule in rules.js to a requirement', () => {
