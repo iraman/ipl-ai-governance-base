@@ -23,12 +23,18 @@ app.use(cors({
 
 app.use(express.json());
 
+/** Log the real error on the server; send clients a generic message with no paths or stack. */
+function serverError(res, e) {
+  console.error(e);
+  res.status(500).json({ error: 'Something went wrong. Please try again.' });
+}
+
 // ---------- Slots ----------
 app.get('/api/slots', (req, res) => {
   try {
     res.json(store.getSlots());
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -37,7 +43,7 @@ app.get('/api/users', (req, res) => {
   try {
     res.json(store.getUsers());
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -47,7 +53,7 @@ app.get('/api/users/:id', (req, res) => {
     if (!u) return res.status(404).json({ error: 'User not found' });
     res.json(u);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -59,7 +65,7 @@ app.post('/api/users', (req, res) => {
     res.status(201).json(user);
   } catch (e) {
     if (e.message === 'UNIQUE') return res.status(409).json({ error: 'Email already registered' });
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -70,7 +76,7 @@ app.get('/api/bookings', (req, res) => {
     const rows = store.getBookings({ date: date || undefined, user_id: user_id ? Number(user_id) : undefined });
     res.json(rows);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -100,7 +106,7 @@ app.post('/api/bookings', (req, res) => {
     const slotLabel = store.getSlotById(Number(slot_id));
     res.status(201).json({ ...row, slot_label: slotLabel?.label });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -179,7 +185,7 @@ app.post('/api/chat/bookings', (req, res) => {
     }
     res.status(201).json(body);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -197,7 +203,7 @@ app.patch('/api/bookings/:id/cancel', (req, res) => {
     store.updateBookingStatus(id, 'cancelled', { cancelled_at: now });
     res.json({ id, status: 'cancelled' });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -214,7 +220,7 @@ app.patch('/api/bookings/:id/no-show', (req, res) => {
     rules.updateBlockIfNeeded(getBookingsForUser, store.setUserBlockedUntil.bind(store), booking.user_id);
     res.json({ id, status: 'no_show' });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -227,7 +233,7 @@ app.patch('/api/bookings/:id/vehicle', (req, res) => {
     store.setBookingVehicle(id, vehicle_id ? Number(vehicle_id) : null);
     res.json({ id, vehicle_id: vehicle_id ? Number(vehicle_id) : null });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -236,7 +242,7 @@ app.get('/api/vehicles', (req, res) => {
   try {
     res.json(store.getVehicles());
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -251,7 +257,7 @@ app.get('/api/slots/:id/can-book', (req, res) => {
     const cutoff = rules.getBookingCutoff(slot, date);
     res.json({ can_book: !pastCutoff, cutoff: cutoff.toISOString(), cutoff_label: cutoff.toLocaleString() });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 
@@ -262,7 +268,7 @@ app.get('/api/bookable-date', (req, res) => {
     const result = rules.isBookableDate(date);
     res.json(result);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    serverError(res, e);
   }
 });
 

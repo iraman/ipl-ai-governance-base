@@ -67,6 +67,30 @@ if (!rulesJs.includes('20, 0, 0, 0')) {
   failed++;
 }
 
+// Booking policy states only limits the code enforces
+assertContains(
+  '.ai-governance/rules/booking-policies.md',
+  ['1 booking per date'],
+  'booking-limits-enforced'
+);
+assertNotContains(
+  '.ai-governance/rules/booking-policies.md',
+  ['2 bookings per date', '5 waitlist', '30 calendar days'],
+  'booking-limits-not-promised'
+);
+
+// Safe errors: security policy and its skill
+assertContains(
+  '.ai-governance/global-security-policy.md',
+  ['Do not leak stack traces or internal paths to clients'],
+  'security-safe-errors'
+);
+assertContains(
+  '.ai-governance/skills/enforce-safe-errors/SKILL.md',
+  ['name: enforce-safe-errors', 'serverError(res, e)', 'e.message', 'global-security-policy.md'],
+  'skill-safe-errors'
+);
+
 // Architecture
 assertContains(
   '.ai-governance/rules/architecture-guidelines.md',

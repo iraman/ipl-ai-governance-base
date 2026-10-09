@@ -1,0 +1,78 @@
+{
+  "description": "Open questions for PRD gaps in prd/traceability.json, asked one at a time by the grill-prd skill. An answered question records who decided, when, and what changes. Run npm run prd:grill for the next question.",
+  "questions": [
+    {
+      "id": "Q-REQ-11",
+      "requirement": "REQ-11",
+      "priority": 1,
+      "owner": "Security",
+      "question": "When must the API require a Trimble ID token, so email sign-in can no longer reach booking and admin actions?",
+      "options": [
+        "Before the pilot with real employees (Recommended)",
+        "Before production launch; the pilot keeps dev email login on localhost only"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "Q-CHAT-06",
+      "requirement": "CHAT-06",
+      "priority": 1,
+      "owner": "Product owner",
+      "question": "While an employee is blocked, does \"chat may book one trip\" mean one urgent chat booking for the whole block, or one per valid urgent request?",
+      "options": [
+        "One urgent chat booking per block; add a limit (Recommended)",
+        "One per valid urgent request; reword the chat PRD",
+        "One urgent chat booking per day of the block; add a limit"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "Q-REQ-10",
+      "requirement": "REQ-10",
+      "priority": 2,
+      "owner": "Security",
+      "question": "Should bookings and cancels use the signed-in employee instead of the user_id sent in the request?",
+      "options": [
+        "Yes, together with the Trimble ID token check (Recommended)",
+        "Yes, now, from the dev session, before Trimble ID is enforced"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "Q-REQ-07",
+      "requirement": "REQ-07",
+      "priority": 2,
+      "owner": "Product owner",
+      "question": "Should the API enforce admin-only access to the day view, vehicle tag, and no-show actions, and hide the Admin tab from employees?",
+      "options": [
+        "Yes, together with the Trimble ID token check (Recommended)",
+        "Yes, now, using is_admin on the signed-in user"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "Q-REQ-08",
+      "requirement": "REQ-08",
+      "priority": 3,
+      "owner": "Product owner",
+      "question": "The baseline PRD is Agreed and does not say weekends and listed public holidays cannot be booked. How should the rule be added?",
+      "options": [
+        "Write a change PRD that adds it to the baseline (Recommended)",
+        "Add it when the baseline PRD is next revised and re-agreed"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "Q-CHAT-07",
+      "requirement": "CHAT-07",
+      "priority": 4,
+      "owner": "Product owner",
+      "question": "The chat PRD says \"a Chat page\", but chat shipped as a floating chat bot on every page. Which is right?",
+      "options": [
+        "The floating chat bot; reword the chat PRD (Recommended)",
+        "A separate Chat page; build it and keep the PRD wording"
+      ],
+      "status": "open"
+    }
+  ]
+}

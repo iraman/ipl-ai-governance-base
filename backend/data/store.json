@@ -498,6 +498,34 @@
       "override_category": "medical_emergency",
       "override_explanation": "Hospital appointment for my father early morning",
       "override_source": "chat"
+    },
+    {
+      "id": 35,
+      "user_id": 2,
+      "slot_id": 1,
+      "booking_date": "2026-10-12",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-10-09 10:29:23",
+      "cancelled_at": "2026-10-09 10:29:35",
+      "no_show_at": null,
+      "override_category": "medical_emergency",
+      "override_explanation": "Hospital appointment for my father early morning.",
+      "override_source": "chat"
+    },
+    {
+      "id": 36,
+      "user_id": 2,
+      "slot_id": 1,
+      "booking_date": "2026-10-12",
+      "status": "cancelled",
+      "vehicle_id": null,
+      "created_at": "2026-10-09 11:03:10",
+      "cancelled_at": "2026-10-09 11:03:22",
+      "no_show_at": null,
+      "override_category": "medical_emergency",
+      "override_explanation": "Hospital appointment for my father early morning.",
+      "override_source": "chat"
     }
   ],
   "vehicles": [

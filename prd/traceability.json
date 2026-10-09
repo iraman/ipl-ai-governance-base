@@ -1,0 +1,196 @@
+{
+  "description": "Every PRD requirement traced to policy, code, and the tests that prove it. A requirement that is not fully implemented must declare a gap; undeclared gaps fail npm run prd:eval.",
+  "prds": ["prd/workride-prd.md", "prd/workride-chat-prd.md"],
+  "plans": ["prd/workride-to-implement.md"],
+  "ruleHelpers": ["parseDate", "toDateOnly", "toLocalISO", "isMorningSlot", "getSlotStart", "isSlotStartInPast", "isWeekend", "isPublicHoliday"],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "title": "Morning slots book by 8:00 PM the previous evening",
+      "prd": { "file": "prd/workride-prd.md", "quote": "by 8:00 PM the previous evening" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "**8:00 PM previous evening**" },
+      "code": [{ "file": "backend/rules.js", "quote": "d.setHours(20, 0, 0, 0)" }],
+      "rules": ["getBookingCutoff", "isPastBookingCutoff"],
+      "tests": [{ "file": "test/backend/rules.test.js", "name": "sets morning cutoff to 8 PM the previous day" }]
+    },
+    {
+      "id": "REQ-02",
+      "title": "Evening slots book by 3:00 PM the same day",
+      "prd": { "file": "prd/workride-prd.md", "quote": "by 3:00 PM the same day" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "**3:00 PM same day**" },
+      "code": [{ "file": "backend/rules.js", "quote": "d.setHours(15, 0, 0, 0)" }],
+      "rules": ["getBookingCutoff", "isPastBookingCutoff"],
+      "tests": [{ "file": "test/backend/rules.test.js", "name": "sets evening cutoff to 3 PM the same day" }]
+    },
+    {
+      "id": "REQ-03",
+      "title": "Four fixed slots: 7:30, 8:30, 5:00, 6:00",
+      "prd": { "file": "prd/workride-prd.md", "quote": "One of the four fixed departures on a date (7:30, 8:30, 5:00, 6:00)" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "7:30, 8:30" },
+      "code": [{ "file": "backend/store.js", "quote": "time: '07:30'" }],
+      "rules": [],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "lists morning and evening slots" }]
+    },
+    {
+      "id": "REQ-04",
+      "title": "One booking per employee per date",
+      "prd": { "file": "prd/workride-prd.md", "quote": "An employee holds one booking on a date." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "**1 booking per date**" },
+      "code": [{ "file": "backend/server.js", "quote": "store.getActiveBookingByUserAndDate(" }],
+      "rules": [],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "creates a booking, then rejects a second booking the same day" }]
+    },
+    {
+      "id": "REQ-05",
+      "title": "Cancel until one hour before the slot starts",
+      "prd": { "file": "prd/workride-prd.md", "quote": "cancel until one hour before the slot starts" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "**1 hour before**" },
+      "code": [{ "file": "backend/rules.js", "quote": "60 * 60 * 1000" }],
+      "rules": ["canCancel"],
+      "tests": [
+        { "file": "test/backend/rules.test.js", "name": "allows cancel until 1 hour before slot start" },
+        { "file": "test/backend/api.test.js", "name": "cancels an active future booking" }
+      ]
+    },
+    {
+      "id": "REQ-06",
+      "title": "Two consecutive no-shows block booking for the next day",
+      "prd": { "file": "prd/workride-prd.md", "quote": "After two consecutive no-shows, the employee can still sign in and cannot book for the next day." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "**2 consecutive no-shows**" },
+      "code": [
+        { "file": "backend/rules.js", "quote": "consecutive < 2" },
+        { "file": "backend/server.js", "quote": "if (rules.isUserBlocked(user)) return res.status(403)" }
+      ],
+      "rules": ["getConsecutiveNoShows", "updateBlockIfNeeded", "isUserBlocked"],
+      "tests": [
+        { "file": "test/backend/rules.test.js", "name": "sets a 1-day block after two consecutive no-shows" },
+        { "file": "test/backend/api.test.js", "name": "marks no-show and blocks after two consecutive no-shows" },
+        { "file": "test/backend/api.test.js", "name": "rejects booking for a blocked user" }
+      ]
+    },
+    {
+      "id": "REQ-07",
+      "title": "Only an admin can view a day's bookings, tag a vehicle, and mark no-shows",
+      "prd": { "file": "prd/workride-prd.md", "quote": "Only an admin can view a day’s bookings, tag a vehicle on each booking, and mark no-shows." },
+      "policy": null,
+      "code": [],
+      "rules": [],
+      "tests": [],
+      "plan": { "file": "prd/workride-to-implement.md", "quote": "## 1. Admin-only day view, vehicle tag, and no-show" },
+      "gap": "Not enforced. GET /api/bookings, PATCH /api/bookings/:id/vehicle, and PATCH /api/bookings/:id/no-show do not check is_admin, and the Admin tab shows for every employee."
+    },
+    {
+      "id": "REQ-10",
+      "title": "Employees book and cancel only for themselves",
+      "prd": { "file": "prd/workride-prd.md", "quote": "They book for themselves" },
+      "policy": null,
+      "code": [],
+      "rules": [],
+      "tests": [],
+      "plan": { "file": "prd/workride-to-implement.md", "quote": "## 2. Bookings and cancels belong to the signed-in employee" },
+      "gap": "Not enforced. POST /api/bookings and POST /api/chat/bookings accept any user_id in the body, and PATCH /api/bookings/:id/cancel cancels any booking."
+    },
+    {
+      "id": "REQ-11",
+      "title": "Employees sign in with Trimble ID",
+      "prd": { "file": "prd/workride-prd.md", "quote": "Employees sign in with Trimble ID." },
+      "policy": { "file": ".ai-governance/rules/trimble-id-auth.md", "quote": "Trimble ID" },
+      "code": [{ "file": "frontend/src/pages/Login.jsx", "quote": "trimble-login" }],
+      "rules": [],
+      "tests": [],
+      "plan": { "file": "prd/workride-to-implement.md", "quote": "## 3. Sign in with Trimble ID" },
+      "gap": "Partly implemented. The login page offers Trimble ID, but the API does not require a Trimble ID token, so email sign-in reaches booking and admin actions."
+    },
+    {
+      "id": "REQ-08",
+      "title": "No booking on weekends or public holidays",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "Cutoffs, one booking per date, weekends, holidays, and the one-hour cancel window still apply." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "Weekends and listed public holidays" },
+      "code": [{ "file": "backend/rules.js", "quote": "Booking not available on public holidays." }],
+      "rules": ["isBookableDate"],
+      "tests": [
+        { "file": "test/backend/rules.test.js", "name": "rejects weekends and listed public holidays" },
+        { "file": "test/backend/api.test.js", "name": "rejects booking on a weekend" }
+      ],
+      "gap": "The baseline PRD (workride-prd.md) never states this rule; only the chat PRD refers to it as already applying. Add it to the baseline PRD."
+    },
+    {
+      "id": "CHAT-01",
+      "title": "Chat-only urgent override for three categories",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "`urgent_category` is `medical_emergency`, `family_emergency`, or `client_visit`." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "Chat only (`POST /api/chat/bookings`)" },
+      "code": [
+        { "file": "backend/rules.js", "quote": "const URGENT_CATEGORIES" },
+        { "file": "backend/server.js", "quote": "rules.validateUrgentOverride(" }
+      ],
+      "rules": ["URGENT_CATEGORIES", "validateUrgentOverride"],
+      "tests": [
+        { "file": "test/backend/rules.test.js", "name": "accepts only the three urgent categories with a 15 to 500 character explanation" },
+        { "file": "test/backend/api.test.js", "name": "books from chat for each urgent category and leaves the block in place" },
+        { "file": "test/backend/api.test.js", "name": "refuses a chat booking for a blocked user without a valid urgent reason" }
+      ]
+    },
+    {
+      "id": "CHAT-02",
+      "title": "Urgent explanation is 15 to 500 characters after trimming",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "15 to 500 characters after trimming" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "15–500 characters" },
+      "code": [
+        { "file": "backend/rules.js", "quote": "text.length < 15" },
+        { "file": "backend/rules.js", "quote": "text.length > 500" }
+      ],
+      "rules": ["validateUrgentOverride"],
+      "tests": [{ "file": "test/backend/rules.test.js", "name": "accepts only the three urgent categories with a 15 to 500 character explanation" }]
+    },
+    {
+      "id": "CHAT-03",
+      "title": "The Book page keeps the hard block",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "A blocked employee can sign in and cannot book there." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "They do not accept an urgent override." },
+      "code": [{ "file": "backend/server.js", "quote": "if (rules.isUserBlocked(user)) return res.status(403)" }],
+      "rules": ["isUserBlocked"],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "keeps the web booking path blocked even when an urgent reason is sent" }]
+    },
+    {
+      "id": "CHAT-04",
+      "title": "Override booking is tagged and the block stays in place",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "That booking is tagged with the category, the explanation, and source `chat`. `blocked_until` stays in place." },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "`blocked_until` stays in place." },
+      "code": [
+        { "file": "backend/server.js", "quote": "override_source: 'chat'" },
+        { "file": "backend/store.js", "quote": "override_category" }
+      ],
+      "rules": [],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "books from chat for each urgent category and leaves the block in place" }]
+    },
+    {
+      "id": "CHAT-05",
+      "title": "Base rules still apply to an urgent chat booking",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "An urgent reason does not move those rules." },
+      "policy": null,
+      "code": [{ "file": "backend/server.js", "quote": "rules.isBookableDate(booking_date)" }],
+      "rules": ["isBookableDate", "isPastBookingCutoff"],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "still rejects a weekend and a past cutoff on the chat path" }]
+    },
+    {
+      "id": "CHAT-06",
+      "title": "Chat may book one trip while the employee is blocked",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "Chat may book one trip when the employee is blocked" },
+      "policy": { "file": ".ai-governance/rules/booking-policies.md", "quote": "may book one trip" },
+      "code": [{ "file": "backend/server.js", "quote": "if (!urgent.ok) return refuse(403" }],
+      "rules": [],
+      "tests": [{ "file": "test/backend/api.test.js", "name": "books from chat for each urgent category and leaves the block in place" }],
+      "gap": "Ambiguous. The code allows one trip per request with a valid reason and no limit during the block (the test books three). Decide whether \"one trip\" means one per block, then add a limit or reword the PRD."
+    },
+    {
+      "id": "CHAT-07",
+      "title": "Chat is a page",
+      "prd": { "file": "prd/workride-chat-prd.md", "quote": "Employees can book the same four slots in a Chat page." },
+      "policy": null,
+      "code": [{ "file": "frontend/src/pages/Chat.jsx", "quote": "data-testid=\"chat-launcher\"" }],
+      "rules": [],
+      "tests": [],
+      "gap": "Out of date. Chat shipped as a floating chat bot on every page, not a separate Chat page. Reword the PRD."
+    }
+  ]
+}

@@ -8,7 +8,7 @@
     { "file": "test/backend/rules.test.js", "name": "blocks a user only while blocked_until is in the future" },
     { "file": "test/backend/rules.test.js", "name": "counts consecutive no-shows from the most recent booking" },
     { "file": "test/backend/rules.test.js", "name": "sets a 1-day block after two consecutive no-shows" },
-    { "file": "test/backend/rules.test.js", "name": "rejects weekends and listed public holidays" },
+    { "file": "test/backend/rules.test.js", "name": "rejects weekends and listed public holidays" },    { "file": "test/backend/api.test.js", "name": "lists morning and evening slots" },
     { "file": "test/backend/api.test.js", "name": "reports weekend and holiday dates as not bookable" },
     { "file": "test/backend/api.test.js", "name": "requires date for bookable-date and can-book helpers" },
     { "file": "test/backend/api.test.js", "name": "returns cutoff info for a slot" },
@@ -25,6 +25,12 @@
       "description": "Booking policy states the cutoffs, cancel window, and no-show block",
       "file": ".ai-governance/rules/booking-policies.md",
       "contains": ["8:00 PM", "3:00 PM", "1 hour", "2 consecutive", "backend/rules.js", "canCancel", "isUserBlocked"]
+    },
+    {
+      "description": "Booking policy states only limits the PRD and code have",
+      "file": ".ai-governance/rules/booking-policies.md",
+      "contains": ["1 booking per date", "Not in the PRD — do not build"],
+      "notContains": ["2 bookings per date", "5 waitlist", "30 calendar days"]
     },
     {
       "description": "rules.js keeps the 8 PM morning and 3 PM evening cutoffs",

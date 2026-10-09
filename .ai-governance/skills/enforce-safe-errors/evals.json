@@ -1,0 +1,24 @@
+{
+  "skill": "enforce-safe-errors",
+  "tests": [
+    { "file": "test/backend/api.test.js", "name": "hides internal error details from API responses" },
+    { "file": "test/backend/api.test.js", "name": "returns JSON error shape for missing booking actions" }
+  ],
+  "assets": [
+    {
+      "description": "Security policy forbids leaking internals in errors",
+      "file": ".ai-governance/global-security-policy.md",
+      "contains": ["Do not leak stack traces or internal paths to clients"]
+    },
+    {
+      "description": "server.js routes unexpected failures through serverError",
+      "file": "backend/server.js",
+      "contains": ["function serverError(res, e)", "console.error(e)", "Something went wrong. Please try again."]
+    },
+    {
+      "description": "server.js never sends internal error text to clients",
+      "file": "backend/server.js",
+      "notContains": ["error: e.message", "error: err.message", "e.stack", "err.stack"]
+    }
+  ]
+}

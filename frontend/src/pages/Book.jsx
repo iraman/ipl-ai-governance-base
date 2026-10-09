@@ -18,7 +18,6 @@ export default function Book() {
   // Today in local timezone (for min date and for "current date" slot filter)
   const now = new Date();
   const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
   // For current date, only show slots whose start time is still in the future (local time)
   const availableSlots =
     bookingDate === todayLocal
@@ -128,8 +127,7 @@ export default function Book() {
                 data-testid="booking-date"
                 value={bookingDate}
                 onChange={(e) => setBookingDate(e.target.value)}
-                min={todayLocal}
-                required
+                min={todayLocal}                required
               />
               {bookingDate && !dateBookable.ok && (
                 <p style={{ fontSize: '0.85rem', color: 'var(--danger)', marginTop: '0.35rem' }}>

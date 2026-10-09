@@ -21,7 +21,8 @@ Use when implementing or reviewing booking, cancellation, no-show, or capacity f
    - Evening: book by 3 PM **same day**
 3. Confirm cancel window: **1 hour before** slot start.
 4. Confirm no-show block: **2 consecutive** → blocked **1 day** on the Book page and `POST /api/bookings` (can still sign in). The chat exception is **PRD change — urgent chat override** below and is owned by `validate-chat-override`.
-5. Ensure weekend/holiday checks use `isBookableDate()`.
+5. Ensure weekend and holiday checks use `isBookableDate()`.
+   Confirm every limit in `booking-policies.md` comes from the PRD and is enforced in code. Do not add a seat cap, waitlist, or advance-booking window; `prd/workride-to-implement.md` rules them out.
 6. Run `npm run skills:eval` and check this skill's cases pass (cutoff boundary, blocked user, cancel window).
 
 ## Output checklist
@@ -34,6 +35,7 @@ Report to the PR or chat:
 - [ ] Web book still matches `isUserBlocked()` with no override
 - [ ] Chat responses name this skill on the no-show block, bookable date, cutoff, and one-booking-per-date steps of `decision_trace`
 - [ ] No invented slot times or capacity limits
+- [ ] Every limit in `booking-policies.md` comes from the PRD and matches `rules.js` or `store.js` (1 booking per date; no seat cap, waitlist, or advance window)
 - [ ] User-facing error messages match API reasons
 
 ## PRD change — urgent chat override

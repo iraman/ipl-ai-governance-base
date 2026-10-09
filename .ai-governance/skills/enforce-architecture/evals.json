@@ -1,0 +1,30 @@
+{
+  "skill": "enforce-architecture",
+  "tests": [
+    { "file": "test/governance/architecture.test.mjs", "name": "calls the API from the frontend only through api.js" },
+    { "file": "test/governance/architecture.test.mjs", "name": "keeps the JSON store with no database package" },
+    { "file": "test/governance/architecture.test.mjs", "name": "adds no heavyweight framework without an architecture change" },
+    { "file": "test/governance/architecture.test.mjs", "name": "keeps booking rules in rules.js, not in route handlers" },
+    { "file": "test/governance/architecture.test.mjs", "name": "restricts CORS to known origins" },
+    { "file": "test/governance/architecture.test.mjs", "name": "keeps one app tree: frontend, backend, and the src placeholder" },
+    { "file": "test/governance/architecture.test.mjs", "name": "routes every page in frontend/src/pages from App.jsx" },
+    { "file": "test/governance/architecture.test.mjs", "name": "returns errors as { error: string }" }
+  ],
+  "assets": [
+    {
+      "description": "Architecture guidelines require api.js and rules.js",
+      "file": ".ai-governance/rules/architecture-guidelines.md",
+      "contains": ["frontend/src/api.js", "backend/rules.js", "Do not introduce a database without an approved architecture change"]
+    },
+    {
+      "description": "Architectural standards forbid NestJS, a database, or a third app tree",
+      "file": ".ai-governance/architectural-standards.md",
+      "contains": ["Do not introduce NestJS, a database, or another HTTP server", "Do not create a third app tree"]
+    },
+    {
+      "description": "Frontend API client is the single place for HTTP calls",
+      "file": "frontend/src/api.js",
+      "contains": ["fetch("]
+    }
+  ]
+}

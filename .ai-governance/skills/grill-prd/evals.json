@@ -1,0 +1,30 @@
+{
+  "skill": "grill-prd",
+  "tests": [
+    { "file": "test/governance/grill.test.mjs", "name": "asks a question for every open PRD gap" },
+    { "file": "test/governance/grill.test.mjs", "name": "asks only about requirements that exist and still have a gap" },
+    { "file": "test/governance/grill.test.mjs", "name": "uses unique question ids" },
+    { "file": "test/governance/grill.test.mjs", "name": "asks one question with at least two options and a named owner" },
+    { "file": "test/governance/grill.test.mjs", "name": "offers no option the security policy rules out" },
+    { "file": "test/governance/grill.test.mjs", "name": "records who decided, when, and what changes for every answered question" },
+    { "file": "test/governance/grill.test.mjs", "name": "asks the highest-priority open question first" }
+  ],
+  "assets": [
+    {
+      "description": "Questions file holds the grill questions",
+      "file": "prd/questions.json",
+      "contains": ["\"questions\"", "\"requirement\"", "\"owner\"", "\"options\""],
+      "notContains": ["localStorage", "sessionStorage"]
+    },
+    {
+      "description": "Grill script prints one next question and fails on unasked gaps",
+      "file": "scripts/prd-grill.mjs",
+      "contains": ["result.next", "unaskedGaps", "process.exit(1)"]
+    },
+    {
+      "description": "Cursor rules point agents to the grill skill",
+      "file": ".cursorrules",
+      "contains": [".ai-governance/skills/grill-prd/SKILL.md", "npm run prd:grill"]
+    }
+  ]
+}

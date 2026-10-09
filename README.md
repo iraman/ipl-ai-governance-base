@@ -65,6 +65,10 @@ Behavioral assets live in `.ai-governance/` and are loaded by Cursor via `.curso
 | `rules/architecture-guidelines.md` | WorkRide stack and API conventions |
 | `skills/validate-booking-rules/` | Skill for reviewing booking changes, with test cases in `evals.json` |
 | `skills/validate-chat-override/` | Skill for the urgent chat override of the no-show block, with test cases in `evals.json` |
+| `skills/enforce-safe-errors/` | Skill that keeps internal error details out of API responses |
+| `skills/validate-prd/` | Skill for PRD structure and requirement traceability (`prd/traceability.json`, `npm run prd:eval`) |
+| `skills/grill-prd/` | Skill that asks the PRD owner one question at a time about each open gap and records the decision (`prd/questions.json`, `npm run prd:grill`) |
+| `skills/enforce-architecture/` | Skill for the agreed architecture: `api.js`, `rules.js`, JSON store, no extra frameworks |
 | `prompts/pr-review-behavioral-assets.md` | PR review template for rule changes |
 
 **Validate locally:**

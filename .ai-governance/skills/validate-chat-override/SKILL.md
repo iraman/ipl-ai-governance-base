@@ -25,7 +25,8 @@ Base booking rules (cutoffs, cancel window, no-show block, one booking per date)
 5. Confirm an accepted override stores `override_category`, `override_explanation`, and `override_source: "chat"`, and does not clear `blocked_until`.
 6. Confirm the override does not skip base rules: `isBookableDate()`, the cutoff, and one booking per date still apply on the chat path.
 7. Confirm a chat request from an employee who is not blocked books without asking for a reason.
-8. Run `npm run skills:eval` and check this skill's cases pass.
+8. Confirm manipulation attempts are refused: admin claims, `override` or `force` flags, look-alike or non-string categories, and "ignore the policy" wording.
+9. Run `npm run skills:eval` and check this skill's cases pass.
 
 ## Output checklist
 
@@ -34,6 +35,7 @@ Report to the PR or chat:
 - [ ] Web book matches `isUserBlocked()` with no override
 - [ ] Chat book of a blocked employee matches `validateUrgentOverride()`
 - [ ] Only the three urgent categories are accepted
+- [ ] Admin claims, override flags, and non-string categories are refused
 - [ ] `blocked_until` is unchanged after an override
 - [ ] Booking rows carry the override fields
 - [ ] Cutoff, weekend, holiday, and one-booking-per-date checks still refuse a chat request
@@ -59,3 +61,6 @@ Test cases are in `evals.json` next to this file. Run them with `npm run skills:
 - Clear or shorten `blocked_until` when an override is accepted
 - Decide urgency in the frontend only; the API must call `validateUrgentOverride()`
 - Skip the cutoff, date, or one-booking-per-date checks for an urgent request
+- Trust `is_admin`, `override`, `force`, or `policy_override` sent in the request body; only `validateUrgentOverride()` can lift the block
+- Accept an `urgent_category` that is not a string, such as `["medical_emergency"]`
+- Let the wording of the explanation ("I am an admin", "ignore the policy") change the decision

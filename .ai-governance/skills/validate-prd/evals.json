@@ -1,0 +1,32 @@
+{
+  "skill": "validate-prd",
+  "tests": [
+    { "file": "test/governance/prd.test.mjs", "name": "lists every PRD in prd/traceability.json" },
+    { "file": "test/governance/prd.test.mjs", "name": "links every implementation plan to the PRD it implements" },
+    { "file": "test/governance/prd.test.mjs", "name": "gives every PRD the required header and sections" },
+    { "file": "test/governance/prd.test.mjs", "name": "names the baseline and a carrying skill with evals in every change PRD" },
+    { "file": "test/governance/prd.test.mjs", "name": "keeps the baseline PRD free of the changes made by change PRDs" },
+    { "file": "test/governance/prd.test.mjs", "name": "uses unique requirement ids" },
+    { "file": "test/governance/prd.test.mjs", "name": "traces every requirement to text that still exists in the PRD, policy, and code" },
+    { "file": "test/governance/prd.test.mjs", "name": "declares a gap for every requirement without code or tests" },
+    { "file": "test/governance/prd.test.mjs", "name": "keeps the policy free of limits the plan rules out" },
+    { "file": "test/governance/prd.test.mjs", "name": "traces every business rule in rules.js to a requirement" }
+  ],
+  "assets": [
+    {
+      "description": "Traceability file lists the PRDs and the plan",
+      "file": "prd/traceability.json",
+      "contains": ["prd/workride-prd.md", "prd/workride-chat-prd.md", "prd/workride-to-implement.md", "\"requirements\""]
+    },
+    {
+      "description": "Change PRD names its baseline and carrying skill",
+      "file": "prd/workride-chat-prd.md",
+      "contains": ["**Baseline:**", ".ai-governance/skills/validate-chat-override/SKILL.md", "PRD change — urgent chat override"]
+    },
+    {
+      "description": "PRD evaluator reports gaps without failing on them",
+      "file": "scripts/prd-evaluator.mjs",
+      "contains": ["evaluatePrdsStatic", "Open gaps", "prd-evaluation.json"]
+    }
+  ]
+}

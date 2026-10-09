@@ -28,8 +28,7 @@ export default function ChatWidget() {
   const [error, setError] = useState('');
 
   const now = new Date();
-  const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const availableSlots = bookingDate === todayLocal
+  const todayLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;  const availableSlots = bookingDate === todayLocal
     ? slots.filter((s) => new Date(`${bookingDate}T${s.time || '00:00'}:00`) > now)
     : slots;
 
@@ -229,8 +228,7 @@ export default function ChatWidget() {
                   data-testid="chat-date"
                   value={bookingDate}
                   onChange={(e) => setBookingDate(e.target.value)}
-                  min={todayLocal}
-                  required
+                  min={todayLocal}                  required
                 />
               </div>
               <div>

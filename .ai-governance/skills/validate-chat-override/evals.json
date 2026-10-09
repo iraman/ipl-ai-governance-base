@@ -6,8 +6,9 @@
     { "file": "test/backend/api.test.js", "name": "refuses a chat booking for a blocked user without a valid urgent reason" },
     { "file": "test/backend/api.test.js", "name": "books from chat for each urgent category and leaves the block in place" },
     { "file": "test/backend/api.test.js", "name": "still rejects a weekend and a past cutoff on the chat path" },
-    { "file": "test/backend/api.test.js", "name": "books from chat without an urgent reason when the employee is not blocked" }
-  ],
+    { "file": "test/backend/api.test.js", "name": "books from chat without an urgent reason when the employee is not blocked" },
+    { "file": "test/backend/rules.test.js", "name": "rejects look-alike and built-in names as urgent categories" },
+    { "file": "test/backend/api.test.js", "name": "ignores admin claims and override flags sent to the chat path" }  ],
   "assets": [
     {
       "description": "Chat PRD defines the chat-only exception and its three categories",
@@ -27,7 +28,12 @@
     {
       "description": "rules.js exports the urgent override check",
       "file": "backend/rules.js",
-      "contains": ["function validateUrgentOverride", "medical_emergency", "family_emergency", "client_visit", "text.length < 15", "text.length > 500"]
+      "contains": ["function validateUrgentOverride", "medical_emergency", "family_emergency", "client_visit", "text.length < 15", "text.length > 500", "typeof category !== 'string'"]
+    },
+    {
+      "description": "Chat route does not trust admin or override flags from the request body",
+      "file": "backend/server.js",
+      "notContains": ["req.body.is_admin", "req.body.override", "req.body.force", "req.body.policy_override"]
     },
     {
       "description": "Chat route checks the override and names this skill in its decision trace",

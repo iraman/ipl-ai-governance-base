@@ -11,15 +11,16 @@
  * Run: npm run skills:eval
  */
 
-import { spawnSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
+import { runTestFile as runTests } from './lib/node-tests.mjs';
 
 const ROOT = join(fileURLToPath(import.meta.url), '..', '..');
 const SKILLS_DIR = join(ROOT, '.ai-governance', 'skills');
 const REPORT_PATH = join(ROOT, 'test-results', 'skill-evaluation.json');
-const TEST_FILES = ['test/backend/rules.test.js', 'test/backend/api.test.js'];
+const BASE_TEST_FILES = ['test/backend/rules.test.js', 'test/backend/api.test.js'];
+const SUITE_NAMES = new Set(['WorkRide API', 'booking rules', 'PRD evaluation', 'PRD grill', 'architecture']);
 const REQUIRED_SECTIONS = ['## When to use', '## Procedure', '## Output checklist', '## Evaluation', '## Do not'];
 
 function read(rel) {
@@ -35,24 +36,6 @@ function parseFrontmatter(text) {
     if (idx > 0) fields[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
   }
   return fields;
-}
-
-/** Run one node:test file and return Map(test name -> passed). */
-function runTestFile(rel) {
-  const result = spawnSync(process.execPath, ['--test', '--test-reporter=tap', rel], {
-    cwd: ROOT,
-    encoding: 'utf8',
-    env: { ...process.env, NODE_ENV: 'test' },
-  });
-  const outcomes = new Map();
-  for (const line of (result.stdout || '').split('\n')) {
-    const m = line.match(/^\s*(not )?ok \d+ - (.+?)(\s+#\s.*)?$/);
-    if (m) outcomes.set(m[2].trim(), !m[1]);
-  }
-  if (outcomes.size === 0) {
-    console.error(`Could not read test results from ${rel}:\n${result.stderr || result.stdout}`);
-  }
-  return outcomes;
 }
 
 function evaluateLifecycle(name, dir) {
@@ -119,12 +102,15 @@ if (skillNames.length === 0) {
   process.exit(1);
 }
 
-const outcomesByFile = new Map(TEST_FILES.map((f) => [f, runTestFile(f)]));
+const evaluated = skillNames.map((name) => ({ name, ...evaluateLifecycle(name, join(SKILLS_DIR, name)) }));
+const testFiles = [...new Set([...BASE_TEST_FILES, ...evaluated.flatMap((s) => (s.evals?.tests || []).map((t) => t.file))])].filter(
+  (f) => existsSync(join(ROOT, f))
+);
+const outcomesByFile = new Map(testFiles.map((f) => [f, runTests(ROOT, f)]));
 const owned = new Set();
 const report = { generatedAt: new Date().toISOString(), skills: [], unownedTests: [], passed: true };
 
-for (const name of skillNames) {
-  const { checks: lifecycle, evals } = evaluateLifecycle(name, join(SKILLS_DIR, name));
+for (const { name, checks: lifecycle, evals } of evaluated) {
   const tests = (evals?.tests || []).map((t) => {
     owned.add(`${t.file}::${t.name}`);
     const outcomes = outcomesByFile.get(t.file);
@@ -138,10 +124,9 @@ for (const name of skillNames) {
   if (!passed) report.passed = false;
 }
 
-const suiteNames = new Set(['WorkRide API', 'booking rules']);
 for (const [file, outcomes] of outcomesByFile) {
   for (const testName of outcomes.keys()) {
-    if (!suiteNames.has(testName) && !owned.has(`${file}::${testName}`)) report.unownedTests.push({ file, name: testName });
+    if (!SUITE_NAMES.has(testName) && !owned.has(`${file}::${testName}`)) report.unownedTests.push({ file, name: testName });
   }
 }
 

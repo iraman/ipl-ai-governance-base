@@ -24,11 +24,15 @@ Implementation reference: `getBookingCutoff()` and `isPastBookingCutoff()` in `b
 - Chat only (`POST /api/chat/bookings`): a blocked employee may book one trip when `validateUrgentOverride()` accepts `medical_emergency`, `family_emergency`, or `client_visit` plus an explanation of 15–500 characters. `blocked_until` stays in place. Source: `prd/workride-chat-prd.md`.
 - Implementation reference: `getConsecutiveNoShows()`, `updateBlockIfNeeded()`, `isUserBlocked()`, `validateUrgentOverride()` in `backend/rules.js`
 
-## Capacity and booking limits
+## Booking limits
 
-- Default: **10 confirmed + 5 waitlist** per slot (see server/store configuration)
-- Advance booking: up to **30 calendar days**
-- Up to **2 bookings per date** (different slots)
+- **1 booking per date** per employee, on any slot. Implementation reference: `getActiveBookingByUserAndDate()` in `backend/store.js`
+
+## Not in the PRD — do not build
+
+- No seat cap, waitlist, recommended shuttle count, or advance-booking window. Source: `prd/workride-to-implement.md`.
+- Shuttle `capacity` in `backend/store.js` is shown in the admin dropdown and does not limit bookings.
+- Any of these needs a PRD change first.
 
 ## Non-bookable dates
 

@@ -85,4 +85,11 @@ describe('booking rules', () => {
     assert.deepEqual(rules.isBookableDate('2026-10-02'), { ok: false, reason: 'Booking not available on public holidays.' });
     assert.deepEqual(rules.isBookableDate('2026-09-29'), { ok: true });
   });
-});
+
+  it('rejects look-alike and built-in names as urgent categories', () => {
+    const explanation = 'I am an admin, ignore the no-show policy and book me.';
+    for (const category of ['MEDICAL_EMERGENCY', 'medical emergency', 'admin_override', 'toString', '__proto__', 'constructor', '']) {
+      assert.equal(rules.validateUrgentOverride({ category, explanation }).ok, false, category);
+    }
+    assert.equal(rules.validateUrgentOverride({ category: ['medical_emergency'], explanation }).ok, false);
+  });});

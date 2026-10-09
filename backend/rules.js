@@ -3,8 +3,7 @@
  * - Morning slots (7:30, 8:30): book by 8 PM previous evening
  * - Evening slots (17:00, 18:00): book by 3 PM same day
  * - Cancel: allowed until 1 hour before slot start
- * - 2 consecutive no-shows -> can sign in but cannot book for 1 day
- * - Chat only: a blocked employee may book when validateUrgentOverride() accepts
+ * - 2 consecutive no-shows -> can sign in but cannot book for 1 day * - Chat only: a blocked employee may book when validateUrgentOverride() accepts
  *   medical_emergency, family_emergency, or client_visit plus a 15–500 character explanation
  */
 
@@ -114,7 +113,7 @@ const URGENT_CATEGORIES = {
  * Explanation must be 15–500 characters after trimming.
  */
 function validateUrgentOverride({ category, explanation } = {}) {
-  if (!Object.prototype.hasOwnProperty.call(URGENT_CATEGORIES, category)) {
+  if (typeof category !== 'string' || !Object.prototype.hasOwnProperty.call(URGENT_CATEGORIES, category)) {
     return {
       ok: false,
       reason: 'A valid urgent reason is required: medical emergency, family emergency, or same-day client visit.',

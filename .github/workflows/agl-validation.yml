@@ -10,8 +10,15 @@ on:
       - 'scripts/governance-regression-tests.mjs'
       - 'scripts/compute-behavior-manifest.mjs'
       - 'scripts/skill-evaluator.mjs'
+      - 'scripts/prd-evaluator.mjs'
+      - 'scripts/prd-grill.mjs'
+      - 'scripts/lib/**'
       - 'backend/**'
+      - 'frontend/src/**'
+      - 'frontend/package.json'
+      - 'package.json'
       - 'test/backend/**'
+      - 'test/governance/**'
       - 'prd/**'
   push:
     branches: [main]
@@ -20,7 +27,9 @@ on:
       - '.cursor/rules/**'
       - 'behavior-manifest.json'
       - 'backend/**'
+      - 'frontend/src/**'
       - 'test/backend/**'
+      - 'test/governance/**'
       - 'prd/**'
 
 jobs:
@@ -44,6 +53,12 @@ jobs:
           npm ci
           npm ci --prefix backend
 
+      - name: Evaluate PRDs
+        run: npm run prd:eval
+
+      - name: Check every PRD gap has a question
+        run: npm run prd:grill -- --all
+
       - name: Evaluate skills
         run: npm run skills:eval
 
@@ -52,13 +67,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: skill-evaluation
-          path: test-results/skill-evaluation.json
+          path: |
+            test-results/skill-evaluation.json
+            test-results/prd-evaluation.json
 
       - name: Verify manifest matches current governance files
-        run: |
-          npm run governance:manifest
-          if ! git diff --quiet behavior-manifest.json; then
-            echo "behavior-manifest.json is out of date. Run: npm run governance:manifest"
-            git diff behavior-manifest.json
-            exit 1
-          fi
+        run: npm run governance:manifest:check

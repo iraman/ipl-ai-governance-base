@@ -8,11 +8,17 @@
     "dev": "node --watch src/index.js",
     "governance:validate": "node scripts/validate-governance.mjs",
     "governance:manifest": "node scripts/compute-behavior-manifest.mjs",
+    "governance:manifest:check": "node scripts/compute-behavior-manifest.mjs --check",
     "governance:test": "node scripts/governance-regression-tests.mjs",
     "skills:eval": "node scripts/skill-evaluator.mjs",
-    "governance:check": "npm run governance:validate && npm run governance:test && npm run skills:eval",
+    "prd:eval": "node scripts/prd-evaluator.mjs",
+    "prd:grill": "node scripts/prd-grill.mjs",
+    "governance:check": "npm run governance:validate && npm run governance:test && npm run prd:eval && npm run prd:grill && npm run skills:eval && npm run governance:manifest:check",
+    "agl:demo": "node scripts/agl-demo.mjs",
+    "agl:video": "node scripts/record-agl-video.mjs",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "node --test test/backend/*.test.js",
+    "test:governance": "node --test test/governance/*.test.mjs",
     "test:frontend": "npx playwright test --config test/playwright.config.js"
   },
   "dependencies": {
