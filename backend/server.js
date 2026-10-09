@@ -114,10 +114,32 @@ app.post('/api/chat/bookings', (req, res) => {
     const slot = store.getSlotById(Number(slot_id));
     if (!slot) return res.status(404).json({ error: 'Slot not found' });
 
+    const SKILL = 'validate-booking-rules';
+    const CHAT_SKILL = 'validate-chat-override';
+    const POLICY = 'booking-policies.md';
+    const CHAT_PRD = 'workride-chat-prd.md';
+    const trace = [];
+    const skillsUsed = () => [...new Set(trace.map((step) => step.skill))];
+    const refuse = (status, error, step) => {
+      trace.push({ ...step, passed: false, result: error });
+      return res.status(status).json({ error, skills: skillsUsed(), decision_trace: trace });
+    };
+
     let override = null;
-    if (rules.isUserBlocked(user)) {
+    const blocked = rules.isUserBlocked(user);
+    trace.push({
+      check: 'No-show block',
+      skill: SKILL,
+      rule: 'isUserBlocked()',
+      source: POLICY,
+      passed: !blocked,
+      result: blocked ? `Blocked until ${user.blocked_until} after 2 consecutive no-shows` : 'Not blocked',
+    });
+    if (blocked) {
       const urgent = rules.validateUrgentOverride({ category: urgent_category, explanation: urgent_explanation });
-      if (!urgent.ok) return res.status(403).json({ error: urgent.reason });
+      const urgentStep = { check: 'Urgent chat override', skill: CHAT_SKILL, rule: 'validateUrgentOverride()', source: CHAT_PRD };
+      if (!urgent.ok) return refuse(403, urgent.reason, urgentStep);
+      trace.push({ ...urgentStep, passed: true, result: `Accepted: ${urgent.label}` });
       override = {
         override_category: urgent.category,
         override_explanation: urgent.explanation,
@@ -125,16 +147,24 @@ app.post('/api/chat/bookings', (req, res) => {
       };
     }
 
+    const dateStep = { check: 'Bookable date', skill: SKILL, rule: 'isBookableDate()', source: POLICY };
     const bookable = rules.isBookableDate(booking_date);
-    if (!bookable.ok) return res.status(400).json({ error: bookable.reason });
-    if (rules.isPastBookingCutoff(slot, booking_date)) return res.status(400).json({ error: 'Booking cutoff passed for this slot and date.' });
-    if (rules.isSlotStartInPast(slot, booking_date)) return res.status(400).json({ error: 'This slot has already started for the selected date.' });
+    if (!bookable.ok) return refuse(400, bookable.reason, dateStep);
+    trace.push({ ...dateStep, passed: true, result: 'Weekday and not a public holiday' });
 
+    const cutoffStep = { check: 'Booking cutoff', skill: SKILL, rule: 'isPastBookingCutoff()', source: POLICY };
+    const cutoffLabel = rules.isMorningSlot(slot) ? '8:00 PM the previous evening' : '3:00 PM the same day';
+    if (rules.isPastBookingCutoff(slot, booking_date)) return refuse(400, 'Booking cutoff passed for this slot and date.', cutoffStep);
+    if (rules.isSlotStartInPast(slot, booking_date)) return refuse(400, 'This slot has already started for the selected date.', cutoffStep);
+    trace.push({ ...cutoffStep, passed: true, result: `Before the cutoff of ${cutoffLabel}` });
+
+    const dayStep = { check: 'One booking per date', skill: SKILL, rule: 'getActiveBookingByUserAndDate()', source: POLICY };
     const existingSlot = store.getBookingByUserSlotDate(Number(user_id), Number(slot_id), booking_date);
-    if (existingSlot) return res.status(409).json({ error: 'Already booked for this slot on this date.' });
+    if (existingSlot) return refuse(409, 'Already booked for this slot on this date.', dayStep);
 
     const existingDay = store.getActiveBookingByUserAndDate(Number(user_id), booking_date);
-    if (existingDay) return res.status(409).json({ error: 'You already have a booking for this date. Only one booking per day allowed.' });
+    if (existingDay) return refuse(409, 'You already have a booking for this date. Only one booking per day allowed.', dayStep);
+    trace.push({ ...dayStep, passed: true, result: 'No other active booking on this date' });
 
     const row = store.createBooking({
       user_id: Number(user_id),
@@ -143,9 +173,9 @@ app.post('/api/chat/bookings', (req, res) => {
       ...(override || {}),
     });
     const slotLabel = store.getSlotById(Number(slot_id));
-    const body = { ...row, slot_label: slotLabel?.label };
+    const body = { ...row, slot_label: slotLabel?.label, skills: skillsUsed(), decision_trace: trace };
     if (override) {
-      body.policy_override = { skill: 'validate-booking-rules', prd: 'workride-chat-prd.md' };
+      body.policy_override = { skill: CHAT_SKILL, prd: CHAT_PRD };
     }
     res.status(201).json(body);
   } catch (e) {

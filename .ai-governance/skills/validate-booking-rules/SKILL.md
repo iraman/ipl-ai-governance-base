@@ -20,9 +20,9 @@ Use when implementing or reviewing booking, cancellation, no-show, or capacity f
    - Morning: book by 8 PM **previous day**
    - Evening: book by 3 PM **same day**
 3. Confirm cancel window: **1 hour before** slot start.
-4. Confirm no-show block: **2 consecutive** → blocked **1 day** on the Book page and `POST /api/bookings` (can still sign in). The chat exception is **PRD change — urgent chat override** below.
+4. Confirm no-show block: **2 consecutive** → blocked **1 day** on the Book page and `POST /api/bookings` (can still sign in). The chat exception is **PRD change — urgent chat override** below and is owned by `validate-chat-override`.
 5. Ensure weekend/holiday checks use `isBookableDate()`.
-6. Run backend tests or manual API checks for edge cases (cutoff boundary, blocked user, chat override).
+6. Run `npm run skills:eval` and check this skill's cases pass (cutoff boundary, blocked user, cancel window).
 
 ## Output checklist
 
@@ -32,7 +32,7 @@ Report to the PR or chat:
 - [ ] Cancel rule matches `canCancel()`
 - [ ] No-show block matches `isUserBlocked()`
 - [ ] Web book still matches `isUserBlocked()` with no override
-- [ ] Chat book matches `validateUrgentOverride()`
+- [ ] Chat responses name this skill on the no-show block, bookable date, cutoff, and one-booking-per-date steps of `decision_trace`
 - [ ] No invented slot times or capacity limits
 - [ ] User-facing error messages match API reasons
 
@@ -42,7 +42,13 @@ Source: `prd/workride-chat-prd.md`. Baseline `prd/workride-prd.md` stays as writ
 
 Old line: **2 consecutive no-shows, blocked 1 day, no exception.**
 
-New line, chat only: a blocked employee may book from `POST /api/chat/bookings` when `validateUrgentOverride()` accepts `urgent_category` of `medical_emergency`, `family_emergency`, or `client_visit` and an explanation of 15–500 characters. The Book page and `POST /api/bookings` still refuse the booking. `blocked_until` is not cleared. Cutoffs, one booking per date, weekends, and holidays still apply.
+New line, chat only: a blocked employee may book from `POST /api/chat/bookings` when `validateUrgentOverride()` accepts `urgent_category` of `medical_emergency`, `family_emergency`, or `client_visit` and an explanation of 15–500 characters. The Book page and `POST /api/bookings` still refuse the booking.
+
+The full procedure and checklist for this exception are in `.ai-governance/skills/validate-chat-override/SKILL.md`.
+
+## Evaluation
+
+Test cases are in `evals.json` next to this file. Run them with `npm run skills:eval`.
 
 ## Do not
 

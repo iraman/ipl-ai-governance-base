@@ -204,6 +204,11 @@ describe('WorkRide API', () => {
       .send({ user_id: 2, slot_id: 4, booking_date: date })
       .expect(403);
     assert.match(missing.body.error, /urgent reason/i);
+    assert.deepEqual(missing.body.skills, ['validate-booking-rules', 'validate-chat-override']);
+    const failed = missing.body.decision_trace.at(-1);
+    assert.equal(failed.check, 'Urgent chat override');
+    assert.equal(failed.skill, 'validate-chat-override');
+    assert.equal(failed.passed, false);
 
     const unknown = await request(app)
       .post('/api/chat/bookings')
@@ -254,9 +259,21 @@ describe('WorkRide API', () => {
       assert.equal(res.body.override_explanation, explanation);
       assert.equal(res.body.override_source, 'chat');
       assert.deepEqual(res.body.policy_override, {
-        skill: 'validate-booking-rules',
+        skill: 'validate-chat-override',
         prd: 'workride-chat-prd.md',
       });
+      assert.deepEqual(res.body.skills, ['validate-booking-rules', 'validate-chat-override']);
+      assert.deepEqual(
+        res.body.decision_trace.map((step) => [step.check, step.skill, step.rule, step.passed]),
+        [
+          ['No-show block', 'validate-booking-rules', 'isUserBlocked()', false],
+          ['Urgent chat override', 'validate-chat-override', 'validateUrgentOverride()', true],
+          ['Bookable date', 'validate-booking-rules', 'isBookableDate()', true],
+          ['Booking cutoff', 'validate-booking-rules', 'isPastBookingCutoff()', true],
+          ['One booking per date', 'validate-booking-rules', 'getActiveBookingByUserAndDate()', true],
+        ]
+      );
+      assert.equal(res.body.decision_trace[1].source, 'workride-chat-prd.md');
     }
     const after = await request(app).get('/api/users/2').expect(200);
     assert.equal(after.body.blocked_until, before.body.blocked_until);
@@ -305,5 +322,11 @@ describe('WorkRide API', () => {
     assert.equal(res.body.status, 'booked');
     assert.equal(res.body.override_category, null);
     assert.equal(res.body.policy_override, undefined);
+    assert.deepEqual(res.body.skills, ['validate-booking-rules']);
+    assert.deepEqual(
+      res.body.decision_trace.map((step) => step.check),
+      ['No-show block', 'Bookable date', 'Booking cutoff', 'One booking per date']
+    );
+    assert.ok(res.body.decision_trace.every((step) => step.passed));
   });
 });

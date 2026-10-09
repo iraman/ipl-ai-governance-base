@@ -92,7 +92,12 @@ export async function createChatBooking({ user_id, slot_id, booking_date, urgent
     body: JSON.stringify({ user_id, slot_id, booking_date, urgent_category, urgent_explanation }),
   });
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(data.error || r.statusText);
+  if (!r.ok) {
+    const err = new Error(data.error || r.statusText);
+    err.skills = data.skills;
+    err.decisionTrace = data.decision_trace;
+    throw err;
+  }
   return data;
 }
 

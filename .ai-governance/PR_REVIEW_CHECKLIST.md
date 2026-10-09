@@ -31,6 +31,7 @@ Use this checklist when a pull request changes files under:
 ## CI / traceability
 
 - [ ] `npm run governance:check` passes locally
+- [ ] `npm run skills:eval` passes for every skill; new or changed tests are listed in the owning skill's `evals.json`
 - [ ] `behavior-manifest.json` updated if governance files changed
 - [ ] PR description notes `AGL-MANIFEST` hash when AI-generated code depends on new rules
 

@@ -23,7 +23,9 @@ The exception is chat only. Chat may book one trip when the employee is blocked 
 
 That booking is tagged with the category, the explanation, and source `chat`. `blocked_until` stays in place. The next chat request without a valid reason is refused. Cutoffs, one booking per date, weekends, holidays, and the one-hour cancel window still apply. An urgent reason does not move those rules.
 
-The behavioral asset that carries this change is `.ai-governance/skills/validate-booking-rules/SKILL.md`, in the section **PRD change — urgent chat override**. `validateUrgentOverride()` is the check.
+The behavioral asset that carries this change is `.ai-governance/skills/validate-chat-override/SKILL.md`, in the section **PRD change — urgent chat override**. `validateUrgentOverride()` is the check. `.ai-governance/skills/validate-booking-rules/SKILL.md` keeps the base booking rules and points to that skill for the exception.
+
+Each skill's test cases are listed in its `evals.json`. `npm run skills:eval` runs them and reports pass or fail per skill.
 
 ## Impact
 

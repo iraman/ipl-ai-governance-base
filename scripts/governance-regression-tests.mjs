@@ -126,6 +126,31 @@ assertContains(
   'skill-prd-delta'
 );
 assertContains(
+  '.ai-governance/skills/validate-chat-override/SKILL.md',
+  [
+    'name: validate-chat-override',
+    'PRD change — urgent chat override',
+    '2 consecutive no-shows, blocked 1 day, no exception',
+    'medical_emergency',
+    'family_emergency',
+    'client_visit',
+    'validateUrgentOverride()',
+    'chat only',
+    'blocked_until',
+  ],
+  'chat-skill-owns-exception'
+);
+assertContains(
+  'prd/workride-chat-prd.md',
+  ['.ai-governance/skills/validate-chat-override/SKILL.md'],
+  'chat-prd-names-skill'
+);
+assertContains(
+  '.cursor/rules/workride-agl.mdc',
+  ['validate-chat-override', 'skills:eval'],
+  'cursor-rule-chat-skill'
+);
+assertContains(
   '.ai-governance/rules/booking-policies.md',
   ['validateUrgentOverride', 'medical_emergency', 'family_emergency', 'client_visit', 'Chat only'],
   'policy-chat-exception'
@@ -135,7 +160,8 @@ function printPrdDelta() {
   console.log(`
 PRD delta
 - Old PRD (prd/workride-prd.md): 2 consecutive no-shows block booking for the next day. No exception.
-- Skill changed: .ai-governance/skills/validate-booking-rules/SKILL.md (PRD change — urgent chat override)
+- Skill added: .ai-governance/skills/validate-chat-override/SKILL.md (PRD change — urgent chat override)
+- Skill changed: .ai-governance/skills/validate-booking-rules/SKILL.md (points to validate-chat-override for the exception)
 - New chat behavior: a blocked employee may book from chat when urgent_category is medical_emergency, family_emergency, or client_visit and the explanation is 15–500 characters. The Book page stays blocked.
 `);
 }

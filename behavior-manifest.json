@@ -2,8 +2,8 @@
   "version": 1,
   "framework": "AGL",
   "project": "trimble-workride",
-  "generatedAt": "2026-10-09T05:47:56.037Z",
-  "bundleHash": "abaf60e860bfd4e42e4d3c7399b0eb94df982a50d58a20ad24933c9babce355a",
+  "generatedAt": "2026-10-09T07:23:44.205Z",
+  "bundleHash": "d50f11d98d866cbb672175e7fe73a6e2b070476a3791c4b3c09e36bb5a473d32",
   "files": [
     {
       "path": ".ai-governance/ADOPTION.md",
@@ -11,11 +11,11 @@
     },
     {
       "path": ".ai-governance/PR_REVIEW_CHECKLIST.md",
-      "sha256": "abf568741637960b67233bfa9fedec43158bf0f6f760950221d1e85fb4b1efda"
+      "sha256": "162f5034524f058129424e29cf71ebd1b66bf1cbe930a8980fe5cb9e9c968ba6"
     },
     {
       "path": ".ai-governance/README.md",
-      "sha256": "1c8f0166d83fed7616f4e0d09b937041bb23b55a744adf9225fcc7b4a9bdd0f1"
+      "sha256": "f11ad458e8fe4dad2f6cb0b4bf996d90f5362373ea7d26d8ae28aac609ebaea6"
     },
     {
       "path": ".ai-governance/architectural-standards.md",
@@ -47,7 +47,19 @@
     },
     {
       "path": ".ai-governance/skills/validate-booking-rules/SKILL.md",
-      "sha256": "5a0a7443ad455b2951d002b12fa0891d36472892c4ece5923ec83dc2aacf1882"
+      "sha256": "69b04f00683cf298684fdfeea74b174269bbce45e8b6ad11435f24082bedb0d3"
+    },
+    {
+      "path": ".ai-governance/skills/validate-booking-rules/evals.json",
+      "sha256": "85f0bac09385cc2bfabb9524e469d390b41ee723cffb4be6f588e799dcb43879"
+    },
+    {
+      "path": ".ai-governance/skills/validate-chat-override/SKILL.md",
+      "sha256": "7ff9268dbccc14bbe4eae7937be7dba23841f5a07bf766a5e121f0a675a03f22"
+    },
+    {
+      "path": ".ai-governance/skills/validate-chat-override/evals.json",
+      "sha256": "4ba17c0ab463347228839ef9b5f2e20052e08595230843e94ec20959a94085cb"
     }
   ],
   "usage": "Reference bundleHash in PRs as AGL-MANIFEST when AI-generated code depends on this rule set."

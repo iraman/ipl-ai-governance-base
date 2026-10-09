@@ -9,7 +9,8 @@
     "governance:validate": "node scripts/validate-governance.mjs",
     "governance:manifest": "node scripts/compute-behavior-manifest.mjs",
     "governance:test": "node scripts/governance-regression-tests.mjs",
-    "governance:check": "npm run governance:validate && npm run governance:test",
+    "skills:eval": "node scripts/skill-evaluator.mjs",
+    "governance:check": "npm run governance:validate && npm run governance:test && npm run skills:eval",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "node --test test/backend/*.test.js",
     "test:frontend": "npx playwright test --config test/playwright.config.js"

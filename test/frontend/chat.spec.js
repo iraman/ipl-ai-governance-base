@@ -53,7 +53,8 @@ test.describe('chat booking', () => {
     await page.getByTestId('chat-urgent-send').click();
 
     const note = page.getByTestId('policy-override-note');
-    await expect(note).toContainText('validate-booking-rules');
+    await expect(note).toContainText('validate-chat-override');
+    await expect(note.getByTestId('skill-trace')).toContainText('validate-booking-rules');
     await expect(note).toContainText(date);
     await expect(note).toContainText('Book page is still blocked');
 

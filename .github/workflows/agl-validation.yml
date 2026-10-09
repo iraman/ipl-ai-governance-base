@@ -9,12 +9,19 @@ on:
       - 'scripts/validate-governance.mjs'
       - 'scripts/governance-regression-tests.mjs'
       - 'scripts/compute-behavior-manifest.mjs'
+      - 'scripts/skill-evaluator.mjs'
+      - 'backend/**'
+      - 'test/backend/**'
+      - 'prd/**'
   push:
     branches: [main]
     paths:
       - '.ai-governance/**'
       - '.cursor/rules/**'
       - 'behavior-manifest.json'
+      - 'backend/**'
+      - 'test/backend/**'
+      - 'prd/**'
 
 jobs:
   governance-check:
@@ -31,6 +38,21 @@ jobs:
 
       - name: Run policy regression tests
         run: npm run governance:test
+
+      - name: Install dependencies for the skill evaluator
+        run: |
+          npm ci
+          npm ci --prefix backend
+
+      - name: Evaluate skills
+        run: npm run skills:eval
+
+      - name: Upload skill evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-evaluation
+          path: test-results/skill-evaluation.json
 
       - name: Verify manifest matches current governance files
         run: |

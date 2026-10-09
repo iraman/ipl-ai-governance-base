@@ -26,7 +26,12 @@ AGL extends Trimble CPD pull-request practices to these meta-assets.
 │   ├── trimble-id-auth.md
 │   └── booking-policies.md
 ├── skills/
-│   └── validate-booking-rules/SKILL.md
+│   ├── validate-booking-rules/
+│   │   ├── SKILL.md
+│   │   └── evals.json        ← test cases run by the skill evaluator
+│   └── validate-chat-override/
+│       ├── SKILL.md
+│       └── evals.json
 ├── prompts/
 │   └── pr-review-behavioral-assets.md
 └── ci/
@@ -54,7 +59,23 @@ AGL-MANIFEST: a1b2c3d4...
 npm run governance:check
 ```
 
-Runs structure validation and policy regression tests (no API key required).
+Runs structure validation, policy regression tests, and the skill evaluator (no API key required).
+
+## Skill evaluator
+
+```bash
+npm run skills:eval
+```
+
+For each folder in `skills/`, the evaluator:
+
+1. Checks the skill's lifecycle assets: `SKILL.md` frontmatter (`name` matches the folder, `description` set), the sections When to use, Procedure, Output checklist, Evaluation, and Do not, and a well-formed `evals.json`.
+2. Runs the backend tests listed in `evals.json` and reports each as pass, fail, or missing.
+3. Checks the policy, PRD, and source files listed under `assets`.
+
+It prints a result per skill, lists backend tests that no skill owns, writes `test-results/skill-evaluation.json`, and exits 1 if any skill fails.
+
+To add a skill, create `skills/<name>/SKILL.md` and `skills/<name>/evals.json`, then add both to `scripts/validate-governance.mjs` and run `npm run governance:manifest`.
 
 ## Pull request policy
 

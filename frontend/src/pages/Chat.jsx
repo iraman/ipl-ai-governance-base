@@ -70,18 +70,28 @@ export default function ChatWidget() {
           addMessage({
             role: 'assistant',
             highlight: true,
-            text: `Booked ${data.booking_date} — ${data.slot_label || slotLabel}. This booking used the validate-booking-rules exception from the chat PRD. The Book page is still blocked until the no-show block ends.`,
+            text: `Booked ${data.booking_date} — ${data.slot_label || slotLabel}. This booking used the ${data.policy_override.skill} exception from the chat PRD. The Book page is still blocked until the no-show block ends.`,
+            skills: data.skills,
+            trace: data.decision_trace,
           });
         } else {
           addMessage({
             role: 'assistant',
             text: `Booking confirmed for ${data.booking_date} — ${data.slot_label || slotLabel}.`,
+            skills: data.skills,
+            trace: data.decision_trace,
           });
         }
         setPhase('done');
         if (user?.id) getUser(user.id).then(setUserWithBlock).catch(() => {});
       })
-      .catch((e) => setError(e.message))
+      .catch((e) => {
+        if (e.decisionTrace) {
+          addMessage({ role: 'assistant', text: `I could not book this: ${e.message}`, skills: e.skills, trace: e.decisionTrace });
+        } else {
+          setError(e.message);
+        }
+      })
       .finally(() => setLoading(false));
   };
 
@@ -178,13 +188,34 @@ export default function ChatWidget() {
         </div>
         <div className="chat-log" data-testid="chat-log">
           {messages.map((message, index) => (
-            <p
+            <div
               key={`${message.role}-${index}`}
               className={message.highlight ? 'policy-override' : `chat-bubble chat-bubble-${message.role}`}
               data-testid={message.highlight ? 'policy-override-note' : undefined}
             >
-              {message.text}
-            </p>
+              <p style={{ margin: 0 }}>{message.text}</p>
+              {message.trace && (
+                <div className="skill-trace" data-testid="skill-trace">
+                  <p className="skill-trace-title">
+                    Skills used:{' '}
+                    {(message.skills || []).map((name, i) => (
+                      <span key={name}>{i > 0 && ', '}<code>{name}</code></span>
+                    ))}
+                  </p>
+                  <ul>
+                    {message.trace.map((step) => (
+                      <li key={step.check} className={step.passed ? 'skill-pass' : 'skill-fail'}>
+                        <strong>{step.passed ? 'Pass' : 'Fail'}: {step.check}</strong>
+                        <span> — {step.result}</span>
+                        <div className="skill-trace-source">
+                          <code>{step.skill}</code> · <code>{step.rule}</code> · {step.source}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 

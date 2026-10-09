@@ -38,6 +38,30 @@ The script:
 
 ---
 
+## Demo: chat overrides the no-show block
+
+`testuser1@company.com` and `testuser2@company.com` are blocked from the Book page and can still book a morning shuttle from the **Shuttle chat** button with an urgent reason.
+
+1. **Stop the backend.**
+2. Run:
+   ```bash
+   node backend/scripts/seedChatOverrideDemo.js
+   ```
+3. **Start the backend** again.
+
+The script:
+
+- Gives both users **2 consecutive no_show** bookings (7:30 AM) on the last two weekdays.
+- Sets each user’s `blocked_until` to **now + 1 day**, so the Book page refuses them.
+- Cancels both users’ upcoming bookings, so any morning slot is free.
+- Prints the next date whose morning cutoff (8 PM the night before) has not passed.
+
+In the app, sign in as either user. The Book page shows **Booking is blocked until…**. Open **Shuttle chat**, pick that date and 7:30 or 8:30 AM, then choose a medical emergency, family emergency, or same-day client visit and explain it in at least 15 characters. Chat books the trip and shows the policy-override note. The Book page stays blocked.
+
+Re-run the script before each demo: the block lasts 1 day, and a booked date cannot be booked again.
+
+---
+
 ## Edit the DB directly (optional)
 
 The DB is a single JSON file: **`backend/data/store.json`**.  

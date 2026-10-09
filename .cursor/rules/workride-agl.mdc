@@ -28,8 +28,9 @@ Before generating or modifying code, follow:
    - Must match `backend/rules.js` (cutoffs, cancel window, no-show block)
    - Morning book by 8 PM prior day; evening by 3 PM same day
    - Cancel until 1 hour before slot; 2 no-shows → 1-day booking block
-   - Chat may override that one-day block only for a valid urgent reason; see the “PRD change — urgent chat override” section in `.ai-governance/skills/validate-booking-rules/SKILL.md`
+   - Chat may override that one-day block only for a valid urgent reason; see the “PRD change — urgent chat override” section in `.ai-governance/skills/validate-chat-override/SKILL.md`
 
-5. **Skills** — use `.ai-governance/skills/validate-booking-rules/SKILL.md` when changing booking flows
+5. **Skills** — use `.ai-governance/skills/validate-booking-rules/SKILL.md` when changing booking flows, and `.ai-governance/skills/validate-chat-override/SKILL.md` when changing the chat booking path
+   - Each skill's test cases are in its `evals.json`; run `npm run skills:eval` before merge
 
 Traceability: reference `behavior-manifest.json` bundleHash in PRs as `AGL-MANIFEST: <hash>`.

@@ -63,7 +63,8 @@ Behavioral assets live in `.ai-governance/` and are loaded by Cursor via `.curso
 | `rules/trimble-id-auth.md` | Trimble ID OAuth; no token storage in `localStorage` |
 | `rules/booking-policies.md` | Cutoffs, cancel window, no-show policy (aligned with `backend/rules.js`) |
 | `rules/architecture-guidelines.md` | WorkRide stack and API conventions |
-| `skills/validate-booking-rules/` | Skill for reviewing booking changes |
+| `skills/validate-booking-rules/` | Skill for reviewing booking changes, with test cases in `evals.json` |
+| `skills/validate-chat-override/` | Skill for the urgent chat override of the no-show block, with test cases in `evals.json` |
 | `prompts/pr-review-behavioral-assets.md` | PR review template for rule changes |
 
 **Validate locally:**
