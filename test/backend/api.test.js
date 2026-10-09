@@ -177,4 +177,133 @@ describe('WorkRide API', () => {
     const res = await request(app).patch('/api/bookings/9999/cancel').expect(404);
     assert.equal(typeof res.body.error, 'string');
   });
+
+  it('keeps the web booking path blocked even when an urgent reason is sent', async () => {
+    const date = nextWeekday(new Date(), 6);
+    const explanation = 'Hospital visit and I still need the shuttle.';
+    const res = await request(app)
+      .post('/api/bookings')
+      .send({
+        user_id: 2,
+        slot_id: 4,
+        booking_date: date,
+        urgent_category: 'medical_emergency',
+        urgent_explanation: explanation,
+      })
+      .expect(403);
+    assert.match(res.body.error, /blocked/i);
+    const list = await request(app).get(`/api/bookings?date=${date}&user_id=2`).expect(200);
+    assert.equal(list.body.length, 0);
+  });
+
+  it('refuses a chat booking for a blocked user without a valid urgent reason', async () => {
+    const date = nextWeekday(new Date(), 6);
+    const explanation = 'Hospital visit and I still need the shuttle.';
+    const missing = await request(app)
+      .post('/api/chat/bookings')
+      .send({ user_id: 2, slot_id: 4, booking_date: date })
+      .expect(403);
+    assert.match(missing.body.error, /urgent reason/i);
+
+    const unknown = await request(app)
+      .post('/api/chat/bookings')
+      .send({
+        user_id: 2,
+        slot_id: 4,
+        booking_date: date,
+        urgent_category: 'traffic',
+        urgent_explanation: explanation,
+      })
+      .expect(403);
+    assert.match(unknown.body.error, /urgent reason/i);
+
+    const short = await request(app)
+      .post('/api/chat/bookings')
+      .send({
+        user_id: 2,
+        slot_id: 4,
+        booking_date: date,
+        urgent_category: 'medical_emergency',
+        urgent_explanation: 'too short',
+      })
+      .expect(403);
+    assert.match(short.body.error, /15 characters/i);
+  });
+
+  it('books from chat for each urgent category and leaves the block in place', async () => {
+    const before = await request(app).get('/api/users/2').expect(200);
+    const explanation = 'Hospital visit and I still need the shuttle.';
+    const cases = [
+      ['medical_emergency', 6],
+      ['family_emergency', 7],
+      ['client_visit', 9],
+    ];
+    for (const [category, offset] of cases) {
+      const date = nextWeekday(new Date(), offset);
+      const res = await request(app)
+        .post('/api/chat/bookings')
+        .send({
+          user_id: 2,
+          slot_id: 4,
+          booking_date: date,
+          urgent_category: category,
+          urgent_explanation: explanation,
+        })
+        .expect(201);
+      assert.equal(res.body.override_category, category);
+      assert.equal(res.body.override_explanation, explanation);
+      assert.equal(res.body.override_source, 'chat');
+      assert.deepEqual(res.body.policy_override, {
+        skill: 'validate-booking-rules',
+        prd: 'workride-chat-prd.md',
+      });
+    }
+    const after = await request(app).get('/api/users/2').expect(200);
+    assert.equal(after.body.blocked_until, before.body.blocked_until);
+    assert.equal(after.body.blocked_until, '2099-01-01 00:00:00');
+
+    const again = nextWeekday(new Date(), 11);
+    await request(app)
+      .post('/api/chat/bookings')
+      .send({ user_id: 2, slot_id: 4, booking_date: again })
+      .expect(403);
+  });
+
+  it('still rejects a weekend and a past cutoff on the chat path', async () => {
+    const explanation = 'Hospital visit and I still need the shuttle.';
+    const weekend = await request(app)
+      .post('/api/chat/bookings')
+      .send({
+        user_id: 2,
+        slot_id: 4,
+        booking_date: '2026-10-10',
+        urgent_category: 'medical_emergency',
+        urgent_explanation: explanation,
+      })
+      .expect(400);
+    assert.match(weekend.body.error, /weekend/i);
+
+    const cutoff = await request(app)
+      .post('/api/chat/bookings')
+      .send({
+        user_id: 2,
+        slot_id: 1,
+        booking_date: '2026-10-09',
+        urgent_category: 'client_visit',
+        urgent_explanation: explanation,
+      })
+      .expect(400);
+    assert.match(cutoff.body.error, /cutoff/i);
+  });
+
+  it('books from chat without an urgent reason when the employee is not blocked', async () => {
+    const date = nextWeekday(new Date(), 4);
+    const res = await request(app)
+      .post('/api/chat/bookings')
+      .send({ user_id: 3, slot_id: 4, booking_date: date })
+      .expect(201);
+    assert.equal(res.body.status, 'booked');
+    assert.equal(res.body.override_category, null);
+    assert.equal(res.body.policy_override, undefined);
+  });
 });

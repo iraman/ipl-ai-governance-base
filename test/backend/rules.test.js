@@ -59,6 +59,26 @@ describe('booking rules', () => {
     assert.ok(new Date(blocked.until) > new Date());
   });
 
+  it('accepts only the three urgent categories with a 15 to 500 character explanation', () => {
+    const explanation = 'Hospital visit and I still need the shuttle.';
+    for (const category of ['medical_emergency', 'family_emergency', 'client_visit']) {
+      const result = rules.validateUrgentOverride({ category, explanation });
+      assert.equal(result.ok, true);
+      assert.equal(result.category, category);
+      assert.equal(result.explanation, explanation);
+    }
+    assert.equal(rules.validateUrgentOverride({ category: 'traffic', explanation }).ok, false);
+    assert.equal(rules.validateUrgentOverride({ explanation }).ok, false);
+    assert.equal(rules.validateUrgentOverride({ category: 'medical_emergency', explanation: 'too short' }).ok, false);
+    assert.equal(rules.validateUrgentOverride({ category: 'medical_emergency', explanation: 'x'.repeat(501) }).ok, false);
+    const trimmed = rules.validateUrgentOverride({
+      category: 'client_visit',
+      explanation: '   Client visit this afternoon.   ',
+    });
+    assert.equal(trimmed.ok, true);
+    assert.equal(trimmed.explanation, 'Client visit this afternoon.');
+  });
+
   it('rejects weekends and listed public holidays', () => {
     assert.equal(rules.isWeekend('2026-10-03'), true);
     assert.deepEqual(rules.isBookableDate('2026-10-03'), { ok: false, reason: 'Booking not available on weekends.' });

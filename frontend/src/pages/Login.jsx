@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@trimble-oss/trimble-id-react';
 import { useAuth as useAppAuth } from '../context/AuthContext';
 import { getUsers } from '../api';
 
@@ -10,9 +9,9 @@ export default function Login() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [usingTrimbleAuth, setUsingTrimbleAuth] = useState(false);
-  
-  const { loginWithRedirect, isAuthenticated: isTrimbleAuthenticated } = useAuth();
-  const { login, isAuthenticated } = useAppAuth();
+
+  const { login, isAuthenticated, trimbleAuth } = useAppAuth();
+  const trimbleLogin = trimbleAuth?.loginWithRedirect;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,7 +35,7 @@ export default function Login() {
     try {
       // Ensure proper state persistence before redirect
       await new Promise(resolve => setTimeout(resolve, 100));
-      await loginWithRedirect();
+      await trimbleLogin();
     } catch (err) {
       console.error('Trimble login error:', err);
       setError('Failed to initiate Trimble login. Please try again.');
@@ -77,26 +76,27 @@ export default function Login() {
           Sign in to book the office shuttle.
         </p>
 
-        {/* Trimble ID Login */}
-        <button
-          type="button"
-          className="btn-primary"
-          style={{ width: '100%', marginBottom: '1rem' }}
-          data-testid="trimble-login"
-          onClick={handleTrimbleLogin}
-          disabled={usingTrimbleAuth}
-        >
-          {usingTrimbleAuth ? 'Redirecting to Trimble ID...' : 'Sign in with Trimble ID'}
-        </button>
+        {trimbleLogin && (
+          <>
+            <button
+              type="button"
+              className="btn-primary"
+              style={{ width: '100%', marginBottom: '1rem' }}
+              data-testid="trimble-login"
+              onClick={handleTrimbleLogin}
+              disabled={usingTrimbleAuth}
+            >
+              {usingTrimbleAuth ? 'Redirecting to Trimble ID...' : 'Sign in with Trimble ID'}
+            </button>
+            <div style={{ textAlign: 'center', margin: '1.5rem 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              or
+            </div>
+          </>
+        )}
 
-        <div style={{ textAlign: 'center', margin: '1.5rem 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-          or
-        </div>
-
-        {/* Fallback Email Login for Development */}
         <form onSubmit={handleEmailSubmit}>
           <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.85rem' }}>
-            <strong>Development Mode:</strong> Use email to sign in (no password)
+            Sign in with your work email. No password on localhost.
           </p>
           <div style={{ marginBottom: '1rem' }}>
             <label style={{ display: 'block', marginBottom: '0.35rem', fontSize: '0.9rem' }}>Email</label>

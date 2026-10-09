@@ -32,10 +32,9 @@ async function resolveUserFromStore(parsedUser) {
   return parsedUser;
 }
 
-export function AuthProvider({ children }) {
+function AuthState({ children, trimbleAuth }) {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
-  const trimbleAuth = useTrimbleAuth();
 
   useEffect(() => {
     let cancelled = false;
@@ -143,6 +142,17 @@ export function AuthProvider({ children }) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+/** Local email login. Does not require a Trimble Developer Console app. */
+export function AuthProvider({ children }) {
+  return <AuthState trimbleAuth={null}>{children}</AuthState>;
+}
+
+/** Used only when Trimble ID env vars are set and TIDProvider is mounted. */
+export function TrimbleAuthProvider({ children }) {
+  const trimbleAuth = useTrimbleAuth();
+  return <AuthState trimbleAuth={trimbleAuth}>{children}</AuthState>;
 }
 
 export function useAuth() {

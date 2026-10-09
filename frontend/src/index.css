@@ -55,7 +55,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-input, select {
+input, select, textarea {
   font-family: var(--font);
   padding: 0.6rem 0.75rem;
   border-radius: var(--radius);
@@ -64,7 +64,7 @@ input, select {
   color: var(--text);
   font-size: 1rem;
 }
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
@@ -172,3 +172,78 @@ input:focus, select:focus {
   color: var(--text-muted);
 }
 .nav-user .btn-secondary { padding: 0.4rem 0.75rem; font-size: 0.875rem; }
+
+.chat-widget {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.chat-launcher {
+  background: var(--accent);
+  color: white;
+  border-radius: 999px;
+  padding: 0.8rem 1.15rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.chat-launcher:hover {
+  background: var(--accent-hover);
+}
+
+.chat-panel {
+  width: min(380px, calc(100vw - 2rem));
+  max-height: min(560px, calc(100vh - 7rem));
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.chat-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin: 0;
+}
+
+.chat-bubble-assistant {
+  align-self: flex-start;
+  background: var(--surface2);
+}
+
+.chat-bubble-user {
+  align-self: flex-end;
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.policy-override {
+  align-self: stretch;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 0;
+}

@@ -104,6 +104,55 @@ app.post('/api/bookings', (req, res) => {
   }
 });
 
+app.post('/api/chat/bookings', (req, res) => {
+  try {
+    const { user_id, slot_id, booking_date, urgent_category, urgent_explanation } = req.body || {};
+    if (!user_id || !slot_id || !booking_date) return res.status(400).json({ error: 'user_id, slot_id, booking_date required' });
+
+    const user = store.getUserById(Number(user_id));
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const slot = store.getSlotById(Number(slot_id));
+    if (!slot) return res.status(404).json({ error: 'Slot not found' });
+
+    let override = null;
+    if (rules.isUserBlocked(user)) {
+      const urgent = rules.validateUrgentOverride({ category: urgent_category, explanation: urgent_explanation });
+      if (!urgent.ok) return res.status(403).json({ error: urgent.reason });
+      override = {
+        override_category: urgent.category,
+        override_explanation: urgent.explanation,
+        override_source: 'chat',
+      };
+    }
+
+    const bookable = rules.isBookableDate(booking_date);
+    if (!bookable.ok) return res.status(400).json({ error: bookable.reason });
+    if (rules.isPastBookingCutoff(slot, booking_date)) return res.status(400).json({ error: 'Booking cutoff passed for this slot and date.' });
+    if (rules.isSlotStartInPast(slot, booking_date)) return res.status(400).json({ error: 'This slot has already started for the selected date.' });
+
+    const existingSlot = store.getBookingByUserSlotDate(Number(user_id), Number(slot_id), booking_date);
+    if (existingSlot) return res.status(409).json({ error: 'Already booked for this slot on this date.' });
+
+    const existingDay = store.getActiveBookingByUserAndDate(Number(user_id), booking_date);
+    if (existingDay) return res.status(409).json({ error: 'You already have a booking for this date. Only one booking per day allowed.' });
+
+    const row = store.createBooking({
+      user_id: Number(user_id),
+      slot_id: Number(slot_id),
+      booking_date,
+      ...(override || {}),
+    });
+    const slotLabel = store.getSlotById(Number(slot_id));
+    const body = { ...row, slot_label: slotLabel?.label };
+    if (override) {
+      body.policy_override = { skill: 'validate-booking-rules', prd: 'workride-chat-prd.md' };
+    }
+    res.status(201).json(body);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.patch('/api/bookings/:id/cancel', (req, res) => {
   try {
     const id = Number(req.params.id);

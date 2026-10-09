@@ -86,6 +86,16 @@ export async function createBooking({ user_id, slot_id, booking_date }) {
   return data;
 }
 
+export async function createChatBooking({ user_id, slot_id, booking_date, urgent_category, urgent_explanation }) {
+  const r = await apiFetch(`${API}/chat/bookings`, {
+    method: 'POST',
+    body: JSON.stringify({ user_id, slot_id, booking_date, urgent_category, urgent_explanation }),
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || r.statusText);
+  return data;
+}
+
 export async function cancelBooking(id) {
   const r = await apiFetch(`${API}/bookings/${id}/cancel`, {
     method: 'PATCH',

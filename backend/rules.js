@@ -4,6 +4,8 @@
  * - Evening slots (17:00, 18:00): book by 3 PM same day
  * - Cancel: allowed until 1 hour before slot start
  * - 2 consecutive no-shows -> can sign in but cannot book for 1 day
+ * - Chat only: a blocked employee may book when validateUrgentOverride() accepts
+ *   medical_emergency, family_emergency, or client_visit plus a 15–500 character explanation
  */
 
 function parseDate(s) {
@@ -99,6 +101,35 @@ function isUserBlocked(user) {
   return new Date(user.blocked_until) > new Date();
 }
 
+/** Chat-only reasons that may book over an active no-show block. */
+const URGENT_CATEGORIES = {
+  medical_emergency: 'Medical emergency',
+  family_emergency: 'Family emergency',
+  client_visit: 'Same-day client visit',
+};
+
+/**
+ * Chat override for a blocked employee.
+ * Category must be one of the three urgent reasons.
+ * Explanation must be 15–500 characters after trimming.
+ */
+function validateUrgentOverride({ category, explanation } = {}) {
+  if (!Object.prototype.hasOwnProperty.call(URGENT_CATEGORIES, category)) {
+    return {
+      ok: false,
+      reason: 'A valid urgent reason is required: medical emergency, family emergency, or same-day client visit.',
+    };
+  }
+  const text = typeof explanation === 'string' ? explanation.trim() : '';
+  if (text.length < 15) {
+    return { ok: false, reason: 'Explain the urgent request in at least 15 characters.' };
+  }
+  if (text.length > 500) {
+    return { ok: false, reason: 'The urgent explanation must be 500 characters or fewer.' };
+  }
+  return { ok: true, category, explanation: text, label: URGENT_CATEGORIES[category] };
+}
+
 /** Weekend: Saturday = 6, Sunday = 0 (getDay()). */
 function isWeekend(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
@@ -138,6 +169,8 @@ module.exports = {
   getConsecutiveNoShows,
   updateBlockIfNeeded,
   isUserBlocked,
+  URGENT_CATEGORIES,
+  validateUrgentOverride,
   isWeekend,
   isPublicHoliday,
   isBookableDate,

@@ -26,6 +26,7 @@ Before generating or modifying code, read and follow:
    - Must match `backend/rules.js`
    - Morning book by 8 PM prior day; evening by 3 PM same day
    - Cancel until 1 hour before slot; 2 no-shows → 1-day booking block
+   - Chat may override that one-day block only for a valid urgent reason; see the “PRD change — urgent chat override” section in `.ai-governance/skills/validate-booking-rules/SKILL.md`
 
 6. **Skills** — use `.ai-governance/skills/validate-booking-rules/SKILL.md` when changing booking flows
 

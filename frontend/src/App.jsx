@@ -1,6 +1,7 @@
 import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Book from './pages/Book';
+import ChatWidget from './pages/Chat';
 import MyBookings from './pages/MyBookings';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="*" element={ready && !user ? <Navigate to="/login" replace /> : <Navigate to="/" replace />} />
       </Routes>
+      {user && <ChatWidget />}
     </div>
   );
 }

@@ -2,8 +2,8 @@
   "version": 1,
   "framework": "AGL",
   "project": "trimble-workride",
-  "generatedAt": "2026-09-26T17:37:56.217Z",
-  "bundleHash": "28b99676b2bc78f79de7509ef1bee2a4bce1bc51817f0f808d57a9446f8bb8c1",
+  "generatedAt": "2026-10-09T05:47:56.037Z",
+  "bundleHash": "abaf60e860bfd4e42e4d3c7399b0eb94df982a50d58a20ad24933c9babce355a",
   "files": [
     {
       "path": ".ai-governance/ADOPTION.md",
@@ -39,7 +39,7 @@
     },
     {
       "path": ".ai-governance/rules/booking-policies.md",
-      "sha256": "a78e0e4467b540d3b2ce00f9fb538a674629a3f311e4c49db14e8845a7fbd6d0"
+      "sha256": "3898843fab80f895f07da36c8915568fbbe92b2fd05fd771f98689dc3ae6b9ea"
     },
     {
       "path": ".ai-governance/rules/trimble-id-auth.md",
@@ -47,7 +47,7 @@
     },
     {
       "path": ".ai-governance/skills/validate-booking-rules/SKILL.md",
-      "sha256": "b621a3b2f5a3dced01e96873a1eb985e01f4d0751dcfb051f9bffbb1b9b5164b"
+      "sha256": "5a0a7443ad455b2951d002b12fa0891d36472892c4ece5923ec83dc2aacf1882"
     }
   ],
   "usage": "Reference bundleHash in PRs as AGL-MANIFEST when AI-generated code depends on this rule set."

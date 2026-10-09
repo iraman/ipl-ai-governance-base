@@ -141,10 +141,23 @@ const store = {
       (b) => b.user_id === user_id && b.booking_date === booking_date && b.status === 'booked'
     );
   },
-  createBooking({ user_id, slot_id, booking_date }) {
+  createBooking({ user_id, slot_id, booking_date, override_category = null, override_explanation = null, override_source = null }) {
     const id = nextId('bookings');
     const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const row = { id, user_id, slot_id, booking_date, status: 'booked', vehicle_id: null, created_at: now, cancelled_at: null, no_show_at: null };
+    const row = {
+      id,
+      user_id,
+      slot_id,
+      booking_date,
+      status: 'booked',
+      vehicle_id: null,
+      created_at: now,
+      cancelled_at: null,
+      no_show_at: null,
+      override_category,
+      override_explanation,
+      override_source,
+    };
     state.bookings.push(row);
     save();
     return row;

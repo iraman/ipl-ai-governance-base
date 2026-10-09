@@ -88,6 +88,60 @@ assertContains(
   'cursor-rule-bridge'
 );
 
+// Baseline PRD stays a hard block. The chat PRD and the booking skill carry the exception.
+assertContains(
+  'prd/workride-prd.md',
+  ['cannot book for the next day'],
+  'baseline-prd-block'
+);
+assertNotContains(
+  'prd/workride-prd.md',
+  ['medical_emergency', 'family_emergency', 'client_visit', 'validateUrgentOverride'],
+  'baseline-prd-no-exception'
+);
+assertContains(
+  'prd/workride-chat-prd.md',
+  [
+    'medical_emergency',
+    'family_emergency',
+    'client_visit',
+    'validateUrgentOverride',
+    'chat only',
+    'PRD change — urgent chat override',
+  ],
+  'chat-prd-exception'
+);
+assertContains(
+  '.ai-governance/skills/validate-booking-rules/SKILL.md',
+  [
+    'PRD change — urgent chat override',
+    '2 consecutive no-shows, blocked 1 day, no exception',
+    'medical_emergency',
+    'family_emergency',
+    'client_visit',
+    'validateUrgentOverride',
+    'chat only',
+    'isUserBlocked()',
+  ],
+  'skill-prd-delta'
+);
+assertContains(
+  '.ai-governance/rules/booking-policies.md',
+  ['validateUrgentOverride', 'medical_emergency', 'family_emergency', 'client_visit', 'Chat only'],
+  'policy-chat-exception'
+);
+
+function printPrdDelta() {
+  console.log(`
+PRD delta
+- Old PRD (prd/workride-prd.md): 2 consecutive no-shows block booking for the next day. No exception.
+- Skill changed: .ai-governance/skills/validate-booking-rules/SKILL.md (PRD change — urgent chat override)
+- New chat behavior: a blocked employee may book from chat when urgent_category is medical_emergency, family_emergency, or client_visit and the explanation is 15–500 characters. The Book page stays blocked.
+`);
+}
+
+printPrdDelta();
+
 if (failed > 0) {
   console.error(`\n${failed} regression test(s) failed`);
   process.exit(1);

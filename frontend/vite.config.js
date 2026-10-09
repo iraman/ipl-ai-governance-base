@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    allowedHosts: ['.ngrok-free.dev', '.ngrok-free.app', '.ngrok.io', '.ngrok.app'],
     proxy: { '/api': { target: process.env.VITE_API_PROXY || 'http://localhost:3001', changeOrigin: true } },
     headers: {
       // Block Google Analytics and other tracking
